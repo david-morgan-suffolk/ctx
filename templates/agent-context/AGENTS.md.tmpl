@@ -1,0 +1,62 @@
+# Agent Guide
+
+## Project Context
+
+{{repoName}}: {{repoDescription}}
+
+Additional durable context lives in `.context/`:
+
+- `.context/project-context.md` - product purpose, architecture, ownership, current state, and deferred work.
+- `.context/engineering-guide.md` - commands, TypeScript style, testing patterns, boundaries, and safety rules.
+- `.context/roadmap-notes.md` - durable decisions, milestones, accepted debt, and staged work.
+
+## Repo Shape
+
+{{workspaceSummary}}
+
+{{workspaceTable}}
+
+## Commands
+
+Package manager: `{{packageManager}}`.
+
+{{commands}}
+
+Do not overstate command scope. If a command only runs part of the suite, say that exactly.
+
+## TypeScript Standards
+
+Detected TS config: {{tsSummary}}
+
+{{tsRules}}
+
+## Testing
+
+{{testGuidance}}
+
+## Safety
+
+{{safetyRules}}
+
+{{artifactRules}}
+
+- Use `.env.example` only for variable names when needed.
+- Do not commit real tokens, bearer headers, database URLs, DSNs, AWS secrets, or local credential values.
+- Preserve unrelated dirty work. Never revert files you did not intentionally change.
+
+## Where To Edit
+
+- Start with `.context/project-context.md` for architecture and ownership.
+- Start with `.context/engineering-guide.md` for commands, tests, style, and safety.
+- For monorepos, prefer package-local `AGENTS.md` overlays only when local ownership differs from root guidance.
+- Keep root guidance compact. Move durable detail into `.context/`.
+
+## Detected Configs
+
+{{detectedConfigs}}
+
+## Maintenance
+
+- Update this file when commands, package ownership, or safety boundaries change.
+- Update `.context/roadmap-notes.md` for durable decisions and accepted debt.
+- Do not use this file as a task log; use issues, PRs, or `.context/current-focus.md` when short-lived notes are needed.

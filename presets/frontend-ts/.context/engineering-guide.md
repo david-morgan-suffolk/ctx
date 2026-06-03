@@ -1,0 +1,94 @@
+# Engineering Guide
+
+Operational standards for working in this repo. Read before changing code.
+
+## Commands
+
+Package manager: TODO (npm / pnpm / bun). Examples below use `<pkg>`.
+
+| Command | Scope |
+|---|---|
+| `<pkg> install` | Install deps from lockfile. |
+| `<pkg> run dev` | Vite dev server with HMR. |
+| `<pkg> run typecheck` | `tsc --noEmit`. Run before claiming type safety. |
+| `<pkg> run lint` | ESLint or Biome. |
+| `<pkg> run build` | Production bundle to `dist/`. Run before claiming production-ready. |
+| `<pkg> run preview` | Serve `dist/` locally. |
+| `<pkg> run test` | Vitest. State scope precisely (unit / component / e2e). |
+
+State command scope exactly. Do not say "all tests pass" unless the script you ran covers every suite — check `package.json` first.
+
+## TypeScript
+
+- `strict: true`. No implicit `any`. `noUncheckedIndexedAccess` recommended.
+- Path alias `@/*` → `src/client/*` (or your chosen root).
+- Module resolution: `Bundler` (Vite-friendly).
+- Validate unknown external input at the network boundary with Zod, then trust the typed value internally.
+- Avoid `any`. If unavoidable, isolate it at one SDK/transport call site and comment why.
+
+## React Patterns
+
+- Components small and single-purpose. Co-locate component-only helpers.
+- Controlled forms via `react-hook-form` with Zod resolver. No uncontrolled inputs in production code.
+- Async surfaces render four states explicitly: **idle, loading, success, error**. Render useful empty/error states — do not silently swallow failures.
+- Effects should not own data ownership. Prefer derived state and explicit fetch hooks.
+- Suspense + ErrorBoundary at route or feature root, not per-component.
+
+## State Management
+
+TODO: choose one and document the rule here.
+- **MobX**: observable stores per feature, composed under a `RootStore`. React via `mobx-react-lite`.
+- **Zustand**: one slice per concern, selectors at the hook boundary.
+- **Context + useReducer**: for low-frequency global state only; avoid for high-churn data.
+
+Whichever choice: forms own their own state (react-hook-form), routing owns navigation state, server data owns itself (TODO: pick TanStack Query / SWR / hand-rolled). Do not duplicate.
+
+## Styling
+
+- TailwindCSS with CSS custom properties for theme tokens (light/dark).
+- shadcn/Radix UI for unstyled, accessible primitives.
+- `clsx` + `tailwind-merge` (via `cn` helper) for conditional classnames.
+- Class Variance Authority (CVA) for component variants.
+- No inline styles except for dynamic values that cannot be expressed as classes.
+
+## Vite
+
+- API requests proxied in dev: `/api` → backend port (configure in `vite.config.ts`).
+- Env: only `VITE_*`-prefixed vars are exposed to the bundle. Never put secrets behind that prefix.
+- Build output `dist/` is the single deploy artifact.
+
+## Testing
+
+- Vitest for unit + component (jsdom or happy-dom).
+- Playwright for end-to-end if needed.
+- Reset module-level state (singletons, stores) in `afterEach`.
+- Mock the network at the boundary (MSW or fetch stub), not at component prop level.
+- Run `<pkg> run typecheck` and `<pkg> run build` before claiming a change is ready.
+
+## Boundaries
+
+- `src/client/` (browser) never imports from `src/server/` (if it exists). Cross-boundary types live in `src/shared/`.
+- API client is a thin module — no business logic, just request shaping and response parsing.
+- Stores do not call `fetch` directly; they go through the API client.
+
+## Safety: Do Not Read
+
+- `.env`, `.env.*` (except `.env.example`)
+- `.secrets/`, `secrets.toml`, `.envrc`
+- `*.pem`, `*.key`, `*.p12`, `*.pfx`
+- Cloud credential files (`~/.aws/credentials`, service account JSON)
+- Local DSNs, connection strings, bearer headers checked in by accident
+- Tokens, API keys, session cookies pasted into commits
+- Provider response payloads that contain user data
+
+Metadata reads are fine: `package.json`, `tsconfig*.json`, lock files, public config files (`vite.config.ts`, `tailwind.config.ts`, `eslint.config.*`, `vitest.config.*`, etc.).
+
+Use `.env.example` only for variable names. Preserve unrelated dirty work — never revert files you did not intentionally change.
+
+## Context Maintenance
+
+- Keep `AGENTS.md` compact. Push detail into these files.
+- Update `Commands` when `package.json` scripts change.
+- Update `.context/project-context.md` when architecture, integrations, or ownership shift.
+- Record durable decisions (chosen state lib, chosen router, chosen test runner) in `.context/roadmap-notes.md`.
+- `.context/current-focus.md` (optional) holds short-lived active-issue notes; delete when resolved.

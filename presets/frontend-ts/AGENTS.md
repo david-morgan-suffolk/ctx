@@ -1,0 +1,57 @@
+# AGENTS.md
+
+Canonical agent entry for this repo. Compact and operational. Deeper durable context lives in `.context/`.
+
+## Project Context
+
+- [.context/project-context.md](.context/project-context.md) — what this app is, architecture, ownership map, integrations.
+- [.context/engineering-guide.md](.context/engineering-guide.md) — commands, TypeScript/React standards, testing, safety.
+- [.context/roadmap-notes.md](.context/roadmap-notes.md) — durable decisions, accepted debt, staged work.
+
+## Stack
+
+React + Vite + TypeScript + TailwindCSS frontend. Forms via `react-hook-form` + Zod. TODO: state library (MobX / Zustand / Context+useReducer). TODO: router. TODO: test runner (Vitest + Playwright recommended).
+
+## Commands
+
+Package manager: TODO (npm / pnpm / bun).
+
+```
+<pkg> install
+<pkg> run dev          # Vite dev server with HMR
+<pkg> run typecheck    # tsc --noEmit
+<pkg> run lint         # ESLint or Biome
+<pkg> run build        # production build to dist/
+<pkg> run preview      # serve built bundle
+<pkg> run test         # Vitest (component + unit)
+```
+
+Cite exact script scope. Do not claim a command runs every test unless `package.json` proves it.
+
+## Standards
+
+- Strict TypeScript. No `any` except at SDK boundaries; isolate and comment.
+- `src/client/` (browser code), `src/shared/` (cross-boundary types). If a backend exists in this repo, it lives in `src/server/` and **`src/client/` must not import from it** — share types via `src/shared/` only.
+- Every async surface renders four states: idle, loading, success, error. Do not hide failed responses.
+- Forms: `react-hook-form` + Zod resolver. Validate on the user-input boundary.
+- Tailwind + CSS variables for theming. shadcn/Radix UI for unstyled primitives.
+- Environment variables exposed to Vite must be non-sensitive. Browser env never contains backend secrets.
+
+## Safety
+
+Do not read `.env`, `.secrets`, certs, tokens, DSNs, cloud credentials. Full list in `.context/engineering-guide.md`. Use `.env.example` for variable names only.
+
+## Where To Edit
+
+| File | Owns |
+|---|---|
+| `src/client/` | React components, UI state, API client helpers, routing. |
+| `src/shared/` | Cross-boundary TypeScript contracts (request/response, domain types). |
+| `vite.config.ts` | Dev proxy, plugins, build output. |
+| `tailwind.config.ts` | Theme tokens, content globs. |
+| `.context/` | Durable architecture, decisions, debt. Update when shape changes. |
+| `AGENTS.md` | This file. Keep compact; push detail into `.context/`. |
+
+## Maintenance
+
+Update commands here when `package.json` scripts change. Update `.context/` when architecture, integrations, or durable decisions shift. Keep `.context/current-focus.md` (optional) for short-lived active-issue notes; delete when resolved.

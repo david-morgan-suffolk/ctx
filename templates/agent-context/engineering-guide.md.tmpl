@@ -1,0 +1,48 @@
+# Engineering Guide
+
+Generated: {{generatedDate}}
+
+## Commands
+
+Package manager: `{{packageManager}}`.
+
+{{commands}}
+
+Command scope rule: cite exact scope only. Do not claim a command runs every test or builds every package unless scripts prove it.
+
+## TypeScript
+
+Detected TS config: {{tsSummary}}
+
+{{tsRules}}
+
+## Testing Patterns
+
+{{testGuidance}}
+
+## Boundaries
+
+- Keep external boundary parsing close to HTTP handlers, CLI args, env readers, file readers, queue consumers, and provider SDK wrappers.
+- Keep business logic out of transport glue when practical.
+- Keep generated API/types/codegen artifacts out of manual edits unless repo docs say otherwise.
+- For monorepos, treat shared schema, public API, worker, runtime, and client changes as contract work. Update all consumers together.
+
+## Safety
+
+{{safetyRules}}
+
+{{artifactRules}}
+
+- Use `.env.example` only for variable names when needed.
+- Do not commit real tokens, bearer headers, database URLs, DSNs, AWS secrets, or local credential values.
+- Preserve unrelated dirty work. Never revert files you did not intentionally change.
+
+## Detected Configs
+
+{{detectedConfigs}}
+
+## Context Maintenance
+
+- Keep `AGENTS.md` compact and operational.
+- Put durable architecture, decisions, and caveats in `.context/`.
+- Remove stale current-focus notes after the issue resolves.
