@@ -44,11 +44,11 @@ When grepping, finding, or reading within the repo, exclude dependency, cache, a
 - `coverage/`
 - `.tsbuildinfo`
 
-Examples:
+Examples (the `rg -g` globs are only needed when running outside the repo's `.gitignore` scope, e.g. with `--no-ignore`):
 
 ```bash
 rg --hidden -g '!{node_modules,dist,.bun,coverage}/**' '<pattern>'
-find . -type d \( -name node_modules -o -name dist -o -name .bun -o -name coverage \) -prune -o -print
+find . -type d \( -name node_modules -o -name dist -o -name .bun -o -name coverage \) -prune -o -type f -print
 ```
 
 Metadata reads inside excluded dirs are fine when the file itself is the source of truth (e.g. `bun.lock`).

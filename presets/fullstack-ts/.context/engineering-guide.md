@@ -98,11 +98,11 @@ When grepping, finding, or reading within the repo, exclude dependency, cache, a
 - `.turbo/`, `.cache/`
 - `.tsbuildinfo`
 
-Examples:
+Examples (the `rg -g` globs are only needed when running outside the repo's `.gitignore` scope, e.g. with `--no-ignore`):
 
 ```bash
 rg --hidden -g '!{node_modules,dist,.vite,coverage,.turbo,.cache}/**' '<pattern>'
-find . -type d \( -name node_modules -o -name dist -o -name .vite -o -name coverage \) -prune -o -print
+find . -type d \( -name node_modules -o -name dist -o -name .vite -o -name coverage \) -prune -o -type f -print
 ```
 
 Metadata reads inside excluded dirs are fine when the file itself is the source of truth (lockfiles, generated `src/server/db/migrations/` SQL).
@@ -118,13 +118,14 @@ import { z } from "zod";
 
 const Env = z.object({
   DATABASE_URL: z.string().url(),
-  SESSION_SECRET: z.string().min(32),
   PORT: z.coerce.number().int().positive().default(3000),
 });
 
 export type Config = z.infer<typeof Env>;
 export const loadConfig = (): Config => Env.parse(process.env);
 ```
+
+Add auth-related vars (e.g. `SESSION_SECRET`) when the auth lib is chosen.
 
 **Client** — `src/client/env.ts` is the only module that reads `import.meta.env`:
 
@@ -133,11 +134,13 @@ import { z } from "zod";
 
 const Env = z.object({
   VITE_API_BASE_URL: z.string().url().optional(),
-  MODE: z.enum(["development", "production", "test"]),
+  MODE: z.string(),
 });
 
 export const env = Env.parse(import.meta.env);
 ```
+
+`MODE` is a free string because Vite supports custom modes via `vite --mode <name>`.
 
 Rules:
 

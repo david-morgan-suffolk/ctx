@@ -111,13 +111,13 @@ Web (`web/`):
 
 API (`api/`):
 
-- `.venv/`, `venv/`, `__pycache__/`, `.pytest_cache/`, `.ruff_cache/`, `.mypy_cache/`, `dist/`, `build/`, `*.egg-info/`
+- `.venv/`, `venv/`, `__pycache__/`, `.pytest_cache/`, `.ruff_cache/`, `.mypy_cache/`, `.tox/`, `dist/`, `build/`, `*.egg-info/`, `.coverage`, `htmlcov/`
 
-Examples:
+Examples (the `rg -g` globs are only needed when running outside the repo's `.gitignore` scope, e.g. with `--no-ignore`):
 
 ```bash
 rg --hidden -g '!{node_modules,dist,.vite,coverage,.venv,venv,__pycache__,.pytest_cache,.ruff_cache,.mypy_cache,build,*.egg-info}/**' '<pattern>'
-find . -type d \( -name node_modules -o -name dist -o -name .venv -o -name __pycache__ -o -name .pytest_cache -o -name coverage \) -prune -o -print
+find . -type d \( -name node_modules -o -name dist -o -name .venv -o -name __pycache__ -o -name .pytest_cache -o -name coverage \) -prune -o -type f -print
 ```
 
 Metadata reads inside excluded dirs are fine when the file itself is the source of truth (`uv.lock`, web lockfile, committed `shared/openapi.json`).

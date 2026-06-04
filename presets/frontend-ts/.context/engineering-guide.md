@@ -82,11 +82,11 @@ When grepping, finding, or reading within the repo, exclude dependency, cache, a
 - `.turbo/`, `.parcel-cache/`
 - `.tsbuildinfo`
 
-Examples:
+Examples (the `rg -g` globs are only needed when running outside the repo's `.gitignore` scope, e.g. with `--no-ignore`):
 
 ```bash
 rg --hidden -g '!{node_modules,dist,.vite,coverage,.turbo,.parcel-cache}/**' '<pattern>'
-find . -type d \( -name node_modules -o -name dist -o -name .vite -o -name coverage \) -prune -o -print
+find . -type d \( -name node_modules -o -name dist -o -name .vite -o -name coverage \) -prune -o -type f -print
 ```
 
 Metadata reads inside excluded dirs are fine when the file itself is the source of truth (lockfiles).
@@ -99,19 +99,21 @@ Metadata reads inside excluded dirs are fine when the file itself is the source 
 import { z } from "zod";
 
 const Env = z.object({
-  VITE_API_BASE_URL: z.string().url(),
+  VITE_API_BASE_URL: z.string().url().optional(),
   VITE_SENTRY_DSN: z.string().optional(),
-  MODE: z.enum(["development", "production", "test"]),
+  MODE: z.string(),
 });
 
 export const env = Env.parse(import.meta.env);
 export type Env = typeof env;
 ```
 
+`VITE_API_BASE_URL` is optional — same-origin deploys leave it unset and let the client call `/api/...` relative paths. `MODE` is a free string because Vite supports custom modes via `vite --mode <name>`.
+
 Rules:
 
 - Only `VITE_*`-prefixed vars enter the bundle. Never put secrets behind that prefix.
-- Outside `src/env.ts`, do not reference `import.meta.env.X`. Lint rule recommended (`no-restricted-syntax` on `MetaProperty`).
+- Outside `src/env.ts`, do not reference `import.meta.env.X`. Lint rule recommended (`no-restricted-syntax` with selector `MemberExpression[object.type='MetaProperty'][property.name='env']`).
 - Tests stub the module (`vi.mock("@/env", ...)`) instead of mutating `import.meta.env`.
 - New `VITE_*` var: extend the Zod schema and add it to `.env.example`.
 
