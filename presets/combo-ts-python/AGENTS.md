@@ -14,7 +14,7 @@ Split repo: `web/` (React + Vite + TypeScript frontend) and `api/` (FastAPI + uv
 
 ## Commands
 
-Web (`web/`): package manager TODO (pnpm / npm / bun).
+Web (`web/`): package manager TODO (pnpm / npm).
 API (`api/`): `uv`.
 
 ```

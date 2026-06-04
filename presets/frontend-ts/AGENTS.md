@@ -14,7 +14,7 @@ React + Vite + TypeScript + TailwindCSS frontend. Forms via `react-hook-form` + 
 
 ## Commands
 
-Package manager: TODO (npm / pnpm / bun).
+Package manager: TODO (pnpm / npm).
 
 ```
 <pkg> install

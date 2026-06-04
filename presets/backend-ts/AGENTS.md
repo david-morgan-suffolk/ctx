@@ -14,7 +14,7 @@ Node + TypeScript backend. Hono for HTTP (with `@hono/node-server`), Zod for req
 
 ## Commands
 
-Package manager: TODO (pnpm / npm / bun). Runtime: TODO (Node 22 / Node 24).
+Package manager: TODO (pnpm / npm). Runtime: TODO (Node 22 / Node 24).
 
 ```
 <pkg> install

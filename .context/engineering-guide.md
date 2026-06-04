@@ -2,24 +2,23 @@
 
 ## Commands
 
-Use Bun.
+Use pnpm. TypeScript runs via `tsx` (devDep).
 
-- `bun run check` - executes `scripts/scaffold-context.ts --help` as a parse/runtime smoke check.
-- `bun run scaffold -- --target <repo>` - dry-runs scaffold generation.
-- `bun run scaffold -- --target <repo> --write` - writes scaffold files.
-- `bun run scaffold -- --target <repo> --write --force` - overwrites existing scaffold paths.
+- `pnpm check` - executes `scripts/scaffold-context.ts --help` as a parse/runtime smoke check.
+- `pnpm scaffold --target <repo>` - dry-runs scaffold generation.
+- `pnpm scaffold --target <repo> --write` - writes scaffold files.
+- `pnpm scaffold --target <repo> --write --force` - overwrites existing scaffold paths.
 
 Validation examples:
 
 ```bash
-bun run scaffold -- --target /Users/david/suffolk/big-speckle --agent-shim --current-focus
-bun run scaffold -- --target /Users/david/suffolk/big --package-overlays
+pnpm scaffold --target /Users/david/suffolk/big-speckle --agent-shim --current-focus
+pnpm scaffold --target /Users/david/suffolk/big --package-overlays
 ```
 
 ## TypeScript
 
-- Keep `scripts/scaffold-context.ts` dependency-free; use Node standard library APIs only.
-- Keep runtime compatible with Bun, but avoid Bun-only APIs unless there is a clear benefit.
+- Keep `scripts/scaffold-context.ts` dependency-free at runtime; use Node standard library APIs only. `tsx` is a devDep that runs the file — it does not become a runtime dependency.
 - Keep template keys explicit and simple: `{{key}}` replacement only.
 - Prefer small helpers over adding a templating dependency.
 - Keep output Markdown deterministic except intentional `generatedDate`.
@@ -40,22 +39,21 @@ When grepping, finding, or reading within the repo, exclude dependency, cache, a
 
 - `node_modules/`
 - `dist/`
-- `.bun/`
 - `coverage/`
 - `.tsbuildinfo`
 
 Examples (the `rg -g` globs are only needed when running outside the repo's `.gitignore` scope, e.g. with `--no-ignore`):
 
 ```bash
-rg --hidden -g '!{node_modules,dist,.bun,coverage}/**' '<pattern>'
-find . -type d \( -name node_modules -o -name dist -o -name .bun -o -name coverage \) -prune -o -type f -print
+rg --hidden -g '!{node_modules,dist,coverage}/**' '<pattern>'
+find . -type d \( -name node_modules -o -name dist -o -name coverage \) -prune -o -type f -print
 ```
 
-Metadata reads inside excluded dirs are fine when the file itself is the source of truth (e.g. `bun.lock`).
+Metadata reads inside excluded dirs are fine when the file itself is the source of truth (e.g. `pnpm-lock.yaml`).
 
 ## Settings
 
-All CLI args and environment variables flow through a single typed parser, not scattered reads of `process.env` / `Bun.env` / `process.argv` across the codebase.
+All CLI args and environment variables flow through a single typed parser, not scattered reads of `process.env` / `process.argv` across the codebase.
 
 - The scaffolder declares its flags in one place at the top of `scripts/scaffold-context.ts`. Downstream functions take the parsed options as typed parameters.
 - New flags or env reads go through that parser. No inline `process.env.X` in detection or template-rendering code.
@@ -79,6 +77,6 @@ All CLI args and environment variables flow through a single typed parser, not s
 
 ## Testing
 
-Current validation is smoke-level only. Use `bun run check` plus dry-runs against known repos.
+Current validation is smoke-level only. Use `pnpm check` plus dry-runs against known repos.
 
 Future tests should use temp fixture repos and assert planned paths plus rendered content snapshots.

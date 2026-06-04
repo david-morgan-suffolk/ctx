@@ -4,7 +4,7 @@ Agent context scaffolding for TypeScript repos, plus copy-paste `.context/` star
 
 ## Presets
 
-Stack-tailored starting `.context/` packs under `presets/`. Use these when starting a new project with a known stack — no Bun, no CLI, just copy.
+Stack-tailored starting `.context/` packs under `presets/`. Use these when starting a new project with a known stack — no install, no CLI, just copy.
 
 ```bash
 cp -r presets/<variant>/. /path/to/new-project/
@@ -44,31 +44,31 @@ Optional files:
 Dry run against a repo:
 
 ```bash
-bun run scaffold -- --target ~/suffolk/big-speckle
+pnpm scaffold --target ~/suffolk/big-speckle
 ```
 
 Write base context files:
 
 ```bash
-bun run scaffold -- --target ~/suffolk/big-speckle --write
+pnpm scaffold --target ~/suffolk/big-speckle --write
 ```
 
 Write base files plus a singular shim:
 
 ```bash
-bun run scaffold -- --target ~/suffolk/big-speckle --write --agent-shim
+pnpm scaffold --target ~/suffolk/big-speckle --write --agent-shim
 ```
 
 Write package overlays for detected workspaces:
 
 ```bash
-bun run scaffold -- --target ~/suffolk/big --write --package-overlays
+pnpm scaffold --target ~/suffolk/big --write --package-overlays
 ```
 
 Overwrite existing generated paths:
 
 ```bash
-bun run scaffold -- --target ~/suffolk/my-repo --write --force
+pnpm scaffold --target ~/suffolk/my-repo --write --force
 ```
 
 ## Behavior

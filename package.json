@@ -5,11 +5,15 @@
   "description": "Agent context templates and scaffolding for TypeScript repos.",
   "type": "module",
   "scripts": {
-    "scaffold": "bun run scripts/scaffold-context.ts",
-    "check": "bun run scripts/scaffold-context.ts --help"
+    "scaffold": "tsx scripts/scaffold-context.ts",
+    "check": "tsx scripts/scaffold-context.ts --help"
   },
-  "packageManager": "bun@1.3.9",
+  "packageManager": "pnpm@10.34.1",
   "engines": {
-    "bun": ">=1.3.0"
+    "node": ">=20.10",
+    "pnpm": ">=10"
+  },
+  "devDependencies": {
+    "tsx": "^4"
   }
 }

@@ -2,7 +2,7 @@
 
 ## Project Context
 
-`@suffolk/ctx` provides reusable agent-context templates and a Bun/TypeScript scaffolder for TypeScript repos.
+`@suffolk/ctx` provides reusable agent-context templates and a Node + pnpm TypeScript scaffolder for TypeScript repos.
 
 Additional durable context lives in `.context/`:
 
@@ -20,11 +20,11 @@ Additional durable context lives in `.context/`:
 
 ## Commands
 
-Use Bun.
+Use pnpm. TypeScript runs via `tsx`.
 
-- `bun run check` - runs scaffold help smoke check.
-- `bun run scaffold -- --target <repo>` - dry-run scaffold for a target repo.
-- `bun run scaffold -- --target <repo> --write` - write base scaffold files.
+- `pnpm check` - runs scaffold help smoke check.
+- `pnpm scaffold --target <repo>` - dry-run scaffold for a target repo.
+- `pnpm scaffold --target <repo> --write` - write base scaffold files.
 
 ## Standards
 

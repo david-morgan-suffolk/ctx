@@ -10,7 +10,7 @@ Shipped 2026-05-14.
 
 Delivered:
 
-- Bun/TypeScript scaffold CLI with dry-run default.
+- Node + pnpm + TypeScript scaffold CLI (TS via `tsx`) with dry-run default.
 - Generic templates for root `AGENTS.md`, optional `AGENT.md`, `.context` files, current focus notes, and package overlays.
 - Metadata detection for package manager, scripts, TypeScript config, common config files, and workspace packages.
 - README usage examples and naming standard.
@@ -29,7 +29,7 @@ Delivered:
 
 - No snapshot tests yet.
 - Workspace glob support handles common one-level patterns, not full glob semantics.
-- TypeScript typechecking is not wired; `bun run check` is a runtime smoke check.
+- TypeScript typechecking is not wired; `pnpm check` is a runtime smoke check.
 
 ## Staged Work
 

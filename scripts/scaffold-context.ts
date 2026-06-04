@@ -177,7 +177,7 @@ function parseArgs(argv: string[]): Args {
 }
 
 function printHelp() {
-  console.log(`Usage: bun run scaffold -- [--target <repo>] [options]
+  console.log(`Usage: pnpm scaffold [--target <repo>] [options]
 
 Options:
   --target <repo>      Target repo. Default is current directory.
@@ -290,7 +290,7 @@ function formatTsSummary(rootPackage: PackageJson, tsConfig: TsConfig | null): s
   return parts.join("; ") + ".";
 }
 
-function formatTsRules(rootPackage: PackageJson, tsConfig: TsConfig | null, packageManager: string): string {
+function formatTsRules(rootPackage: PackageJson, tsConfig: TsConfig | null, _packageManager: string): string {
   const opts = tsConfig?.compilerOptions ?? {};
   const rules = [
     "- Preserve the repository's existing TypeScript module style and import suffix convention.",
@@ -305,7 +305,6 @@ function formatTsRules(rootPackage: PackageJson, tsConfig: TsConfig | null, pack
   if (opts.moduleResolution === "NodeNext" || opts.moduleResolution === "Node16") {
     rules.push("- NodeNext/Node16 projects usually require explicit runtime file extensions for relative imports; follow current source convention.");
   }
-  if (packageManager === "bun") rules.push("- Use Bun commands and Bun-compatible APIs unless existing code intentionally targets Node APIs.");
 
   return rules.join("\n");
 }
@@ -324,7 +323,6 @@ function formatTestGuidance(rootPackage: PackageJson, packageManager: string): s
   ];
 
   if ("vitest" in deps) lines.push("- Vitest detected; keep tests close to source or in existing test folders.");
-  if (scripts.test?.includes("bun test")) lines.push("- Bun test detected; use Bun test APIs and avoid Jest-only globals.");
   if ("jest" in deps) lines.push("- Jest detected; preserve existing Jest config and transform setup.");
   if ("@playwright/test" in deps) lines.push("- Playwright detected; keep browser tests isolated from unit tests unless scripts combine them.");
   lines.push("- Prefer real local behavior in tests; mock only network, filesystem, time, and other process boundaries.");
@@ -358,7 +356,6 @@ async function formatDetectedConfigs(target: string): Promise<string> {
 async function detectPackageManager(target: string, rootPackage: PackageJson): Promise<string> {
   const declared = rootPackage.packageManager?.split("@")[0];
   if (declared) return declared;
-  if (await exists(join(target, "bun.lock")) || await exists(join(target, "bun.lockb"))) return "bun";
   if (await exists(join(target, "pnpm-lock.yaml"))) return "pnpm";
   if (await exists(join(target, "yarn.lock"))) return "yarn";
   if (await exists(join(target, "package-lock.json"))) return "npm";
@@ -411,14 +408,12 @@ async function expandWorkspacePattern(target: string, pattern: string): Promise<
 }
 
 function installFor(packageManager: string): string {
-  if (packageManager === "bun") return "bun install";
   if (packageManager === "pnpm") return "pnpm install";
   if (packageManager === "yarn") return "yarn install";
   return "npm install";
 }
 
 function runFor(packageManager: string, script: string): string {
-  if (packageManager === "bun") return `bun run ${script}`;
   if (packageManager === "pnpm") return `pnpm run ${script}`;
   if (packageManager === "yarn") return `yarn ${script}`;
   return `npm run ${script}`;

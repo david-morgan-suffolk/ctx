@@ -4,7 +4,7 @@ Operational standards for working in this combo repo. Read before changing code.
 
 ## Commands
 
-`web/` uses TODO (pnpm / npm / bun). `api/` uses `uv`. Examples below use `<pkg>` for the web package manager.
+`web/` uses TODO (pnpm / npm). `api/` uses `uv`. Examples below use `<pkg>` for the web package manager.
 
 ### API (`api/`)
 

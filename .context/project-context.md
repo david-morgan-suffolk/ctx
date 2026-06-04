@@ -2,7 +2,7 @@
 
 ## What This Repo Is
 
-`@suffolk/ctx` is a small Bun/TypeScript tool for scaffolding agent-readable context into TypeScript repos.
+`@suffolk/ctx` is a small Node + pnpm TypeScript tool (TS runs via `tsx`) for scaffolding agent-readable context into TypeScript repos.
 
 Core value: new and existing repos should get a consistent `AGENTS.md` plus `.context/` structure that helps agents understand purpose, commands, boundaries, safety, and durable project decisions without inventing facts.
 
@@ -34,6 +34,6 @@ The scaffolder reads safe metadata from a target repo, builds a render context, 
 ## Deferred Work
 
 - Add snapshot tests for rendered templates.
-- Add fixture repos for Bun package, Node package, and workspace monorepo.
+- Add fixture repos for a single-package Node project and a workspace monorepo.
 - Add optional config file support for repo-specific template choices.
 - Add richer workspace glob support if needed beyond one-level patterns.

@@ -14,7 +14,7 @@ Single-repo TypeScript fullstack. React + Vite + Tailwind in `src/client/`. Node
 
 ## Commands
 
-Package manager: TODO (pnpm / npm / bun). Runtime: TODO (Node 22 / 24).
+Package manager: TODO (pnpm / npm). Runtime: TODO (Node 22 / 24).
 
 ```
 <pkg> install

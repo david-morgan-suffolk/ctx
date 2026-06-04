@@ -4,7 +4,7 @@ Operational standards for working in this fullstack repo. Read before changing c
 
 ## Commands
 
-Package manager: TODO (pnpm / npm / bun). Runtime: TODO (Node 22 / 24).
+Package manager: TODO (pnpm / npm). Runtime: TODO (Node 22 / 24).
 
 | Command | Scope |
 |---|---|

@@ -4,7 +4,7 @@ Operational standards for working in this repo. Read before changing code.
 
 ## Commands
 
-Package manager: TODO (npm / pnpm / bun). Examples below use `<pkg>`.
+Package manager: TODO (pnpm / npm). Examples below use `<pkg>`.
 
 | Command | Scope |
 |---|---|
