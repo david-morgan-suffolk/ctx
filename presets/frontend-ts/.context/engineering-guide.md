@@ -140,6 +140,23 @@ Use `.env.example` only for variable names. Preserve unrelated dirty work — ne
 - **Never commit secrets.** Real tokens, DSNs, bearer headers, cloud credentials. `.env.example` is for variable names only.
 - **Preserve unrelated dirty work.** Never restage or revert files you did not intentionally touch.
 
+## Local Agent Scratch
+
+Agents drop transient working files at repo root while in the middle of a task: `PLAN.md`, `TODO.md`, `NOTES.md`, `SCRATCH.md`. These reflect one session's in-flight reasoning. They are not durable design docs and should not enter git.
+
+Add to `.gitignore`:
+
+```
+PLAN.md
+TODO.md
+NOTES.md
+SCRATCH.md
+```
+
+- `AGENTS.md` is **durable** and stays committed. It is the canonical entrypoint, not scratch — do not add it to `.gitignore`.
+- Durable architecture, decisions, and short-lived focus notes belong in `.context/` (committed). Scratch belongs at root (ignored).
+- Plans worth keeping graduate into `.context/roadmap-notes.md` or the PR description before the scratch file is discarded.
+
 ## Context Maintenance
 
 - Keep `AGENTS.md` compact. Push detail into these files.
