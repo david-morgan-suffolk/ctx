@@ -57,25 +57,6 @@ class CreateUserRequest(BaseModel):
 - HTTP request/response bodies, third-party API responses, anything entering the process from outside.
 - Validate **once** at the boundary, then convert to internal `@dataclass` for downstream code.
 
-## Settings
-
-`pydantic-settings` is the entry point for all environment variables.
-
-```python
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_")
-    database_url: str
-    log_level: str = "INFO"
-```
-
-Rules:
-- One `Settings` class per app. Constructed exactly once at startup.
-- Every env-driven value goes through it. **Never** call `os.environ.get(...)` in domain code.
-- Pass the `Settings` instance (or specific fields) explicitly into composition root. Do not import a global.
-- In tests, build a `Settings` with overrides or use `monkeypatch.setenv(...)` before constructing.
-
 ## Layout
 
 ```
@@ -143,6 +124,25 @@ find . -type d \( -name .venv -o -name venv -o -name __pycache__ -o -name .pytes
 ```
 
 Metadata reads inside excluded dirs are fine when the file itself is the source of truth (e.g. `uv.lock`).
+
+## Settings
+
+`pydantic-settings` is the entry point for all environment variables.
+
+```python
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_")
+    database_url: str
+    log_level: str = "INFO"
+```
+
+Rules:
+- One `Settings` class per app. Constructed exactly once at startup.
+- Every env-driven value goes through it. **Never** call `os.environ.get(...)` in domain code.
+- Pass the `Settings` instance (or specific fields) explicitly into composition root. Do not import a global.
+- In tests, build a `Settings` with overrides or use `monkeypatch.setenv(...)` before constructing.
 
 ## Safety: Do Not Read
 

@@ -122,7 +122,7 @@ const Env = z.object({
 });
 
 export type Config = z.infer<typeof Env>;
-export const loadConfig = (): Config => Env.parse(process.env);
+export const loadConfig = () => Env.parse(process.env);
 ```
 
 Add auth-related vars (e.g. `SESSION_SECRET`) when the auth lib is chosen.
