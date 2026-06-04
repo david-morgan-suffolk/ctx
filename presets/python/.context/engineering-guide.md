@@ -124,6 +124,25 @@ If this codebase is a web service or worker, follow these:
 - Domain models do not import from adapters. Dependency arrow points inward.
 - `__main__.py` (or the app factory) is the only place that knows about both `Settings` and concrete adapter implementations.
 
+## Search Scope
+
+When grepping, finding, or reading within the repo, exclude dependency, cache, and build output. They pollute results, slow `find`, and hold no source-of-truth content.
+
+- `.venv/`, `venv/`
+- `__pycache__/`
+- `.pytest_cache/`, `.ruff_cache/`, `.mypy_cache/`
+- `dist/`, `build/`
+- `*.egg-info/`
+
+Examples:
+
+```bash
+rg --hidden -g '!{.venv,venv,__pycache__,.pytest_cache,.ruff_cache,.mypy_cache,dist,build,*.egg-info}/**' '<pattern>'
+find . -type d \( -name .venv -o -name venv -o -name __pycache__ -o -name .pytest_cache -o -name dist -o -name build \) -prune -o -print
+```
+
+Metadata reads inside excluded dirs are fine when the file itself is the source of truth (e.g. `uv.lock`).
+
 ## Safety: Do Not Read
 
 - `.env`, `.env.*` (except `.env.example`)
@@ -137,6 +156,15 @@ If this codebase is a web service or worker, follow these:
 Metadata reads are fine: `pyproject.toml`, `uv.lock`, `pytest.ini`, `tox.ini`, `ruff.toml`, and public config files.
 
 Use `.env.example` only for variable names. Preserve unrelated dirty work — never revert files you did not intentionally change.
+
+## Commits
+
+- **One concern per commit.** Do not bundle a refactor with a feature with a dep bump.
+- **Subject ≤ 72 chars, imperative mood.** Conventional prefix when useful (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`).
+- **Body explains *why*, not *what*.** The diff shows what.
+- **Lockfile updates commit with the source change that triggered them.** `uv.lock` rides with the `pyproject.toml` edit. Generated OpenAPI or stub artifacts (if any) commit with the model edit that produced them.
+- **Never commit secrets.** Real tokens, DSNs, bearer headers, cloud credentials. `.env.example` is for variable names only.
+- **Preserve unrelated dirty work.** Never restage or revert files you did not intentionally touch.
 
 ## Context Maintenance
 

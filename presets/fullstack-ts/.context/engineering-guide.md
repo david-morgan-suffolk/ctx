@@ -87,6 +87,65 @@ src/
 - Shared: pure schema tests if logic is non-trivial.
 - Reset env vars, singletons, and mocks in `afterEach`.
 
+## Search Scope
+
+When grepping, finding, or reading within the repo, exclude dependency, cache, and build output. They pollute results, slow `find`, and hold no source-of-truth content.
+
+- `node_modules/`
+- `dist/`, `dist/client/`, `dist/server/`
+- `.vite/`
+- `coverage/`
+- `.turbo/`, `.cache/`
+- `.tsbuildinfo`
+
+Examples:
+
+```bash
+rg --hidden -g '!{node_modules,dist,.vite,coverage,.turbo,.cache}/**' '<pattern>'
+find . -type d \( -name node_modules -o -name dist -o -name .vite -o -name coverage \) -prune -o -print
+```
+
+Metadata reads inside excluded dirs are fine when the file itself is the source of truth (lockfiles, generated `src/server/db/migrations/` SQL).
+
+## Settings
+
+Each side has its own typed settings seam. They never share — server env stays on the server, browser env stays in the bundle.
+
+**Server** — `src/server/config.ts` is the only module that reads `process.env`:
+
+```ts
+import { z } from "zod";
+
+const Env = z.object({
+  DATABASE_URL: z.string().url(),
+  SESSION_SECRET: z.string().min(32),
+  PORT: z.coerce.number().int().positive().default(3000),
+});
+
+export type Config = z.infer<typeof Env>;
+export const loadConfig = (): Config => Env.parse(process.env);
+```
+
+**Client** — `src/client/env.ts` is the only module that reads `import.meta.env`:
+
+```ts
+import { z } from "zod";
+
+const Env = z.object({
+  VITE_API_BASE_URL: z.string().url().optional(),
+  MODE: z.enum(["development", "production", "test"]),
+});
+
+export const env = Env.parse(import.meta.env);
+```
+
+Rules:
+
+- `src/server/` never reads `import.meta.env`. `src/client/` never reads `process.env`.
+- Backend secrets never get a `VITE_*` prefix — Vite would ship them to the browser.
+- `src/shared/` has no settings module. Shared code takes typed values in as arguments.
+- Tests build the config from overrides; do not mutate `process.env` or `import.meta.env` globally.
+
 ## Safety: Do Not Read
 
 - `.env`, `.env.*` (except `.env.example`)
@@ -100,6 +159,15 @@ src/
 Metadata reads are fine: `package.json`, `tsconfig*.json`, lock files, public config files (`vite.config.ts`, `drizzle.config.ts`, `vitest.config.ts`, `tailwind.config.ts`, etc.).
 
 Use `.env.example` only for variable names. Preserve unrelated dirty work — never revert files you did not intentionally change.
+
+## Commits
+
+- **One concern per commit.** Do not bundle a refactor with a feature with a dep bump.
+- **Subject ≤ 72 chars, imperative mood.** Conventional prefix when useful (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`).
+- **Body explains *why*, not *what*.** The diff shows what.
+- **Generated artifacts and contract changes ride with their source.** Drizzle migration SQL commits with the `schema.ts` edit. A `src/shared/` contract change commits with the consuming-side edits so client + server stay in lockstep. Lockfile updates commit with the `package.json` change that triggered them.
+- **Never commit secrets.** Real tokens, DSNs, bearer headers, cloud credentials. `.env.example` is for variable names only.
+- **Preserve unrelated dirty work.** Never restage or revert files you did not intentionally touch.
 
 ## Context Maintenance
 

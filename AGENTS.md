@@ -40,6 +40,8 @@ Use Bun.
 - Do not make scaffolder read broad source trees unless needed; prefer metadata files and existence checks.
 - Preserve unrelated dirty work. Never revert files you did not intentionally change.
 
+Search scope, settings discipline, and commit style live in [`.context/engineering-guide.md`](.context/engineering-guide.md).
+
 ## Where To Edit
 
 - CLI behavior: `scripts/scaffold-context.ts`.

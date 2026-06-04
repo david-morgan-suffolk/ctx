@@ -71,6 +71,50 @@ Whichever choice: forms own their own state (react-hook-form), routing owns navi
 - API client is a thin module — no business logic, just request shaping and response parsing.
 - Stores do not call `fetch` directly; they go through the API client.
 
+## Search Scope
+
+When grepping, finding, or reading within the repo, exclude dependency, cache, and build output. They pollute results, slow `find`, and hold no source-of-truth content.
+
+- `node_modules/`
+- `dist/`
+- `.vite/`
+- `coverage/`
+- `.turbo/`, `.parcel-cache/`
+- `.tsbuildinfo`
+
+Examples:
+
+```bash
+rg --hidden -g '!{node_modules,dist,.vite,coverage,.turbo,.parcel-cache}/**' '<pattern>'
+find . -type d \( -name node_modules -o -name dist -o -name .vite -o -name coverage \) -prune -o -print
+```
+
+Metadata reads inside excluded dirs are fine when the file itself is the source of truth (lockfiles).
+
+## Settings
+
+`src/env.ts` is the only module that touches `import.meta.env`. It validates the Vite-exposed `VITE_*` vars with Zod and exports a typed `env` object. Components, hooks, and the API client import `env` — they never read `import.meta.env` directly.
+
+```ts
+import { z } from "zod";
+
+const Env = z.object({
+  VITE_API_BASE_URL: z.string().url(),
+  VITE_SENTRY_DSN: z.string().optional(),
+  MODE: z.enum(["development", "production", "test"]),
+});
+
+export const env = Env.parse(import.meta.env);
+export type Env = typeof env;
+```
+
+Rules:
+
+- Only `VITE_*`-prefixed vars enter the bundle. Never put secrets behind that prefix.
+- Outside `src/env.ts`, do not reference `import.meta.env.X`. Lint rule recommended (`no-restricted-syntax` on `MetaProperty`).
+- Tests stub the module (`vi.mock("@/env", ...)`) instead of mutating `import.meta.env`.
+- New `VITE_*` var: extend the Zod schema and add it to `.env.example`.
+
 ## Safety: Do Not Read
 
 - `.env`, `.env.*` (except `.env.example`)
@@ -84,6 +128,15 @@ Whichever choice: forms own their own state (react-hook-form), routing owns navi
 Metadata reads are fine: `package.json`, `tsconfig*.json`, lock files, public config files (`vite.config.ts`, `tailwind.config.ts`, `eslint.config.*`, `vitest.config.*`, etc.).
 
 Use `.env.example` only for variable names. Preserve unrelated dirty work — never revert files you did not intentionally change.
+
+## Commits
+
+- **One concern per commit.** Do not bundle a refactor with a feature with a dep bump.
+- **Subject ≤ 72 chars, imperative mood.** Conventional prefix when useful (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`).
+- **Body explains *why*, not *what*.** The diff shows what.
+- **Lockfile updates commit with the `package.json` change** that triggered them.
+- **Never commit secrets.** Real tokens, DSNs, bearer headers, cloud credentials. `.env.example` is for variable names only.
+- **Preserve unrelated dirty work.** Never restage or revert files you did not intentionally touch.
 
 ## Context Maintenance
 

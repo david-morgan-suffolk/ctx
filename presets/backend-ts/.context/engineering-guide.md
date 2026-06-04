@@ -73,6 +73,49 @@ If this service runs async jobs, keep these rules. Otherwise delete this section
 - Workers do not call routes. They share services with the API.
 - `src/lib/` holds pure helpers — no I/O, no provider SDKs.
 
+## Search Scope
+
+When grepping, finding, or reading within the repo, exclude dependency, cache, and build output. They pollute results, slow `find`, and hold no source-of-truth content.
+
+- `node_modules/`
+- `dist/`
+- `coverage/`
+- `.tsbuildinfo`
+- `.turbo/`, `.cache/`
+
+Examples:
+
+```bash
+rg --hidden -g '!{node_modules,dist,coverage,.turbo,.cache}/**' '<pattern>'
+find . -type d \( -name node_modules -o -name dist -o -name coverage -o -name .turbo -o -name .cache \) -prune -o -print
+```
+
+Metadata reads inside excluded dirs are fine when the file itself is the source of truth (lockfiles, generated `src/db/migrations/` SQL).
+
+## Settings
+
+`src/config.ts` is the only place `process.env` is read. It exports a Zod-parsed `Config` constructed once at startup. Route handlers, services, workers, and the DB client take the typed value in — they never reach for `process.env` themselves.
+
+```ts
+import { z } from "zod";
+
+const Env = z.object({
+  DATABASE_URL: z.string().url(),
+  LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
+  PORT: z.coerce.number().int().positive().default(3000),
+});
+
+export type Config = z.infer<typeof Env>;
+export const loadConfig = (): Config => Env.parse(process.env);
+```
+
+Rules:
+
+- One `loadConfig()` call per process, in `src/index.ts` (or the app factory). Pass `Config` (or specific fields) explicitly downstream.
+- **Never** `process.env.X` outside `src/config.ts`. Lint rule recommended.
+- Tests build a `Config` literal directly — they do not mutate `process.env` globally.
+- New env vars: extend the Zod schema, update `.env.example`, regenerate types if any consumer relies on them.
+
 ## Safety: Do Not Read
 
 - `.env`, `.env.*` (except `.env.example`)
@@ -86,6 +129,15 @@ If this service runs async jobs, keep these rules. Otherwise delete this section
 Metadata reads are fine: `package.json`, `tsconfig*.json`, lock files, public config files (`drizzle.config.ts`, `vitest.config.ts`, `biome.json`, etc.).
 
 Use `.env.example` only for variable names. Preserve unrelated dirty work — never revert files you did not intentionally change.
+
+## Commits
+
+- **One concern per commit.** Do not bundle a refactor with a feature with a dep bump.
+- **Subject ≤ 72 chars, imperative mood.** Conventional prefix when useful (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`).
+- **Body explains *why*, not *what*.** The diff shows what.
+- **Generated artifacts ride with their source change.** Drizzle migration SQL commits with the `schema.ts` edit that produced it. Lockfile updates commit with the `package.json` change that triggered them.
+- **Never commit secrets.** Real tokens, DSNs, bearer headers, cloud credentials. `.env.example` is for variable names only.
+- **Preserve unrelated dirty work.** Never restage or revert files you did not intentionally touch.
 
 ## Context Maintenance
 

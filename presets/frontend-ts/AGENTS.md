@@ -41,6 +41,8 @@ Cite exact script scope. Do not claim a command runs every test unless `package.
 
 Do not read `.env`, `.secrets`, certs, tokens, DSNs, cloud credentials. Full list in `.context/engineering-guide.md`. Use `.env.example` for variable names only.
 
+Search scope, settings discipline, and commit style live in [`.context/engineering-guide.md`](.context/engineering-guide.md).
+
 ## Where To Edit
 
 | File | Owns |

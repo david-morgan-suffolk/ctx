@@ -101,6 +101,64 @@ TODO. Pick once and document:
 - Web: Vitest + jsdom for components. MSW for fetch mocking, fed by the generated types so tests stay in sync.
 - Contract: optional snapshot test that the committed `shared/openapi.json` matches a fresh emit. Catches forgotten regeneration in PRs.
 
+## Search Scope
+
+When grepping, finding, or reading within the repo, exclude dependency, cache, and build output on each side. They pollute results, slow `find`, and hold no source-of-truth content.
+
+Web (`web/`):
+
+- `node_modules/`, `dist/`, `.vite/`, `coverage/`, `.turbo/`, `.tsbuildinfo`
+
+API (`api/`):
+
+- `.venv/`, `venv/`, `__pycache__/`, `.pytest_cache/`, `.ruff_cache/`, `.mypy_cache/`, `dist/`, `build/`, `*.egg-info/`
+
+Examples:
+
+```bash
+rg --hidden -g '!{node_modules,dist,.vite,coverage,.venv,venv,__pycache__,.pytest_cache,.ruff_cache,.mypy_cache,build,*.egg-info}/**' '<pattern>'
+find . -type d \( -name node_modules -o -name dist -o -name .venv -o -name __pycache__ -o -name .pytest_cache -o -name coverage \) -prune -o -print
+```
+
+Metadata reads inside excluded dirs are fine when the file itself is the source of truth (`uv.lock`, web lockfile, committed `shared/openapi.json`).
+
+## Settings
+
+Each side owns its own typed settings seam. Settings never cross the contract — only request/response shapes do.
+
+**API (`api/`)** — `Settings(BaseSettings)` in `api/src/<pkg>/settings.py` is the only env reader:
+
+```python
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_")
+    database_url: str
+    log_level: str = "INFO"
+```
+
+Constructed once in `api/src/<pkg>/main.py` (the app factory). Services take `Settings` (or specific fields) in. **Never** `os.environ.get(...)` in domain code.
+
+**Web (`web/`)** — `web/src/env.ts` is the only module that reads `import.meta.env`:
+
+```ts
+import { z } from "zod";
+
+const Env = z.object({
+  VITE_API_BASE_URL: z.string().url().optional(),
+  MODE: z.enum(["development", "production", "test"]),
+});
+
+export const env = Env.parse(import.meta.env);
+```
+
+Rules:
+
+- API secrets never reach the web bundle. The only API-related value in `web/` is the public base URL (and even that is optional in same-origin deploys).
+- New API env var: extend `Settings`, update `api/.env.example`, document any operational rollout in `.context/roadmap-notes.md`.
+- New web env var: extend the Zod schema, add to `web/.env.example`, prefix with `VITE_`.
+- Tests on each side build settings from overrides — never mutate `os.environ` or `import.meta.env` globally.
+
 ## Safety: Do Not Read
 
 - `.env`, `.env.*` (except `.env.example`)
@@ -114,6 +172,16 @@ TODO. Pick once and document:
 Metadata reads are fine: `pyproject.toml`, `uv.lock`, `package.json`, `tsconfig*.json`, lock files, `vite.config.ts`, `ruff.toml`, `pytest.ini`, and `shared/openapi.json`.
 
 Use `.env.example` only for variable names. Preserve unrelated dirty work — never revert files you did not intentionally change.
+
+## Commits
+
+- **One concern per commit.** Do not bundle a refactor with a feature with a dep bump.
+- **Subject ≤ 72 chars, imperative mood.** Conventional prefix when useful (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`).
+- **Body explains *why*, not *what*.** The diff shows what.
+- **Contract changes ride together.** A pydantic model edit in `api/` commits in the same change as the regenerated `shared/openapi.json` and `web/src/api-client/types.ts`. Splitting them creates silent drift.
+- **Lockfile updates commit with the source change** that triggered them (`uv.lock` with `pyproject.toml`; web lockfile with `package.json`).
+- **Never commit secrets.** Real tokens, DSNs, bearer headers, cloud credentials. `.env.example` is for variable names only.
+- **Preserve unrelated dirty work.** Never restage or revert files you did not intentionally touch.
 
 ## Context Maintenance
 
