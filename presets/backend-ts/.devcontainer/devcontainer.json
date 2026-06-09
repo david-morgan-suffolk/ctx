@@ -1,0 +1,12 @@
+{
+  "name": "backend-ts",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22",
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && (test -f package.json && pnpm install || echo 'no package.json yet')",
+  "forwardPorts": [3000, 5432, 6379],
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  },
+  "remoteUser": "node"
+}

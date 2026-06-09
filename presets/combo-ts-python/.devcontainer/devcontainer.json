@@ -1,0 +1,18 @@
+{
+  "name": "combo-ts-python",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12",
+      "installTools": true
+    }
+  },
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && pipx install uv && (test -f web/package.json && (cd web && pnpm install) || true) && (test -f api/pyproject.toml && (cd api && uv sync) || true)",
+  "forwardPorts": [5173, 8000],
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-python.python", "charliermarsh.ruff"]
+    }
+  },
+  "remoteUser": "node"
+}

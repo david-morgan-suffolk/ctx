@@ -1,0 +1,11 @@
+{
+  "name": "library-ts",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22",
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && (test -f package.json && pnpm install || echo 'no package.json yet')",
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  },
+  "remoteUser": "node"
+}
