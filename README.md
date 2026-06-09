@@ -1,20 +1,33 @@
 # ctx
 
-Copy-paste `.context/` starter packs and a small scaffolder for agent-readable repo context.
+Agent-readable repo context, packaged two ways:
+
+1. A **GitHub template** — click "Use this template", run `./init.sh`, pick a preset, get a clean repo with `.context/`, `AGENTS.md`, and a matching devcontainer.
+2. A **scaffolder** — drop the same context into an existing repo by reading its metadata, no template required.
+
+## Use as a GitHub Template
+
+On this repo's GitHub page, click **Use this template → Create a new repository**. In the new repo:
+
+```bash
+./init.sh                 # interactive: pick a preset from the menu
+./init.sh --preset api-ts # or pick up-front
+```
+
+`init.sh` copies the chosen preset's `AGENTS.md`, `.context/`, and `.devcontainer/` to the repo root, then deletes `presets/`, `scripts/`, `templates/`, `package.json`, and itself. What's left is your new repo.
+
+After:
+
+```bash
+grep -rn TODO .context/ AGENTS.md      # fill in markers
+git add -A && git commit -m "init from ctx-template"
+```
+
+Open in VS Code or Codespaces and "Reopen in Container" to get the preset's toolchain (Node + pnpm, Python + uv, or both).
+
+**Maintainer note:** mark this repo as a template in GitHub → Settings → General → "Template repository".
 
 ## Presets
-
-Stack-tailored starting packs under `presets/`. No install, no CLI — just copy.
-
-```bash
-cp -r presets/<variant>/. /path/to/new-project/
-```
-
-This drops `AGENTS.md` at the project root and `.context/{project-context,engineering-guide,roadmap-notes}.md` alongside. Fill in the `TODO:` markers:
-
-```bash
-grep -rn '\bTODO' /path/to/new-project/AGENTS.md /path/to/new-project/.context/
-```
 
 | Variant | Pick when |
 |---|---|
@@ -28,20 +41,19 @@ grep -rn '\bTODO' /path/to/new-project/AGENTS.md /path/to/new-project/.context/
 | `library-ts` | Published TS package or developer CLI tool. ESM, `tsc`-only, runtime-neutral, Changesets, optional `bin`. |
 | `library-py` | Published Python package or developer CLI tool. `uv` + `ruff` + `ty` + `pytest` + `hatchling`, `py.typed` shipped, optional `[project.scripts]`. |
 
-## File Shape
-
-Every preset drops the same four files:
+Each preset drops four files plus a devcontainer:
 
 - `AGENTS.md` — canonical entrypoint. Compact, operational. Stack, commands, standards, ownership map.
 - `.context/project-context.md` — purpose, architecture, ownership, current state, deferred work.
 - `.context/engineering-guide.md` — commands, language standards, framework patterns, testing, safety, commits.
 - `.context/roadmap-notes.md` — completed milestones, durable decisions, accepted debt, staged work.
+- `.devcontainer/devcontainer.json` — VS Code / Codespaces dev environment for that stack.
 
 `AGENTS.md` is the canonical name. Some tools expect singular `AGENT.md` — generate it as a shim, not the source of truth.
 
-## Scaffolder
+## Adding context to an existing repo
 
-When you don't want a preset and would rather infer generic context from an existing repo's metadata:
+For repos you can't reasonably re-create from a template, the scaffolder infers generic context from existing metadata:
 
 ```bash
 pnpm scaffold --target ~/path/to/repo            # dry-run

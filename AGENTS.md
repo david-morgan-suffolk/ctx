@@ -2,7 +2,7 @@
 
 ## Project Context
 
-`@suffolk/ctx` provides reusable agent-context templates and a Node + pnpm TypeScript scaffolder for TypeScript repos.
+`@suffolk/ctx` provides reusable agent-context templates packaged two ways: as a **GitHub repo template** (click "Use this template" → run `./init.sh` → pick a preset) and as a **Node + pnpm TypeScript scaffolder** for adding context into existing repos.
 
 Additional durable context lives in `.context/`:
 
@@ -14,7 +14,10 @@ Additional durable context lives in `.context/`:
 
 | Path | Owns |
 |------|------|
-| `scripts/scaffold-context.ts` | CLI that detects repo metadata and renders context templates. |
+| `init.sh` | Bash applier run inside a templated repo. Picks a preset, copies it to root, deletes template scaffolding. |
+| `presets/<variant>/` | Stack-tailored starter packs. Each contains `AGENTS.md`, `.context/`, and `.devcontainer/`. |
+| `.devcontainer/` | Devcontainer for the template repo itself (removed by `init.sh` in templated copies). |
+| `scripts/scaffold-context.ts` | CLI that detects repo metadata and renders context templates for existing repos. |
 | `templates/agent-context/` | Markdown templates for root, context, shim, current-focus, and package overlay files. |
 | `README.md` | User-facing usage and standard explanation. |
 
@@ -29,8 +32,9 @@ Use pnpm. TypeScript runs via `tsx`.
 ## Standards
 
 - `AGENTS.md` is canonical. `AGENT.md` is optional compatibility shim only.
-- Templates must stay generic and leave TODOs for unknown project-specific facts.
-- Script must default to dry-run and skip existing files unless `--force` is passed.
+- Templates and presets must stay generic and leave TODOs for unknown project-specific facts.
+- `init.sh` must be dependency-free bash, work in non-interactive mode via `--preset`, and never overwrite a user's `.context/` without `--force`.
+- Scaffolder must default to dry-run and skip existing files unless `--force` is passed.
 - Detection must use repo metadata, not secret-bearing files.
 - Keep templates ASCII, compact, and source-backed.
 
@@ -44,7 +48,9 @@ Search scope, settings discipline, and commit style live in [`.context/engineeri
 
 ## Where To Edit
 
-- CLI behavior: `scripts/scaffold-context.ts`.
-- Generated text: `templates/agent-context/*.tmpl`.
+- Template-applier behavior: `init.sh`.
+- Preset content: `presets/<variant>/{AGENTS.md,.context/*,.devcontainer/devcontainer.json}`.
+- Scaffolder CLI behavior: `scripts/scaffold-context.ts`.
+- Scaffolder-generated text: `templates/agent-context/*.tmpl`.
 - Usage docs: `README.md`.
 - Durable project context: `.context/*.md`.
