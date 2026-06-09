@@ -1,0 +1,11 @@
+{
+  "name": "ctx (template)",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22",
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@10.34.1 --activate && pnpm install",
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  },
+  "remoteUser": "node"
+}
