@@ -1,16 +1,20 @@
 # ctx
 
-Agent context scaffolding for TypeScript repos, plus copy-paste `.context/` starter packs for fresh projects.
+Copy-paste `.context/` starter packs and a small scaffolder for agent-readable repo context.
 
 ## Presets
 
-Stack-tailored starting `.context/` packs under `presets/`. Use these when starting a new project with a known stack — no install, no CLI, just copy.
+Stack-tailored starting packs under `presets/`. No install, no CLI — just copy.
 
 ```bash
 cp -r presets/<variant>/. /path/to/new-project/
 ```
 
-This drops `AGENTS.md` at the project root and `.context/{project-context,engineering-guide,roadmap-notes}.md` alongside. Edit the `TODO:` markers — `grep -rn '\bTODO' /path/to/new-project/AGENTS.md /path/to/new-project/.context/` lists every blank.
+This drops `AGENTS.md` at the project root and `.context/{project-context,engineering-guide,roadmap-notes}.md` alongside. Fill in the `TODO:` markers:
+
+```bash
+grep -rn '\bTODO' /path/to/new-project/AGENTS.md /path/to/new-project/.context/
+```
 
 | Variant | Pick when |
 |---|---|
@@ -19,76 +23,33 @@ This drops `AGENTS.md` at the project root and `.context/{project-context,engine
 | `fullstack-ts` | One repo, `src/{client,server,shared}`, React + Hono with shared Zod contracts. |
 | `python` | `uv` + `ruff` + `ty` + `pytest`. `pydantic-settings` entry, `@dataclass` internal, `pydantic` at boundaries. |
 | `combo-ts-python` | React + Vite frontend (`web/`) and FastAPI backend (`api/`) with OpenAPI-generated TS client. |
+| `api-ts` | Node + Hono + Zod HTTP API. No DB layer assumed — storage and queues sit behind external adapters. |
+| `api-py` | Python + FastAPI + Pydantic HTTP API. Async, `httpx` outbound, OpenAPI authoritative. No DB layer assumed. |
 | `library-ts` | Published TS package or developer CLI tool. ESM, `tsc`-only, runtime-neutral, Changesets, optional `bin`. |
 | `library-py` | Published Python package or developer CLI tool. `uv` + `ruff` + `ty` + `pytest` + `hatchling`, `py.typed` shipped, optional `[project.scripts]`. |
 
-Presets are static, hand-tuned content. The scaffolder below is a separate track for inferring generic context from an existing repo's metadata.
+## File Shape
 
-## Standard
+Every preset drops the same four files:
 
-Use `AGENTS.md` as the canonical root guide. Generate `AGENT.md` only as a compatibility shim when a tool expects singular naming.
+- `AGENTS.md` — canonical entrypoint. Compact, operational. Stack, commands, standards, ownership map.
+- `.context/project-context.md` — purpose, architecture, ownership, current state, deferred work.
+- `.context/engineering-guide.md` — commands, language standards, framework patterns, testing, safety, commits.
+- `.context/roadmap-notes.md` — completed milestones, durable decisions, accepted debt, staged work.
 
-Generated base files:
+`AGENTS.md` is the canonical name. Some tools expect singular `AGENT.md` — generate it as a shim, not the source of truth.
 
-- `AGENTS.md`
-- `.context/project-context.md`
-- `.context/engineering-guide.md`
-- `.context/roadmap-notes.md`
+## Scaffolder
 
-Optional files:
-
-- `AGENT.md` with `--agent-shim`
-- `.context/current-focus.md` with `--current-focus`
-- package-local `AGENTS.md` files with `--package-overlays`
-
-## Usage
-
-Dry run against a repo:
+When you don't want a preset and would rather infer generic context from an existing repo's metadata:
 
 ```bash
-pnpm scaffold --target ~/suffolk/big-speckle
+pnpm scaffold --target ~/path/to/repo            # dry-run
+pnpm scaffold --target ~/path/to/repo --write    # write base files
 ```
 
-Write base context files:
+Flags: `--force` overwrites, `--agent-shim` adds `AGENT.md`, `--current-focus` adds the optional scratch file, `--package-overlays` writes small `AGENTS.md` files inside detected workspace packages.
 
-```bash
-pnpm scaffold --target ~/suffolk/big-speckle --write
-```
+Reads only metadata (`package.json`, `tsconfig*.json`, common config files, workspace manifests). Skips existing files unless `--force`. Leaves `TODO:` markers where it can't infer. Does not read `.env`, `.secrets`, certs, or provider payloads.
 
-Write base files plus a singular shim:
-
-```bash
-pnpm scaffold --target ~/suffolk/big-speckle --write --agent-shim
-```
-
-Write package overlays for detected workspaces:
-
-```bash
-pnpm scaffold --target ~/suffolk/big --write --package-overlays
-```
-
-Overwrite existing generated paths:
-
-```bash
-pnpm scaffold --target ~/suffolk/my-repo --write --force
-```
-
-## Behavior
-
-- Defaults to dry-run. Add `--write` to change files.
-- Skips existing files unless `--force` is passed.
-- Reads only repo metadata: `package.json`, `tsconfig*.json`, common config filenames, and workspace package manifests.
-- Does not read `.env`, `.secrets`, local params, certs, or provider payload dumps.
-- Uses detected scripts and package manager names instead of inventing commands.
-- Leaves TODO markers where project-specific context needs human input.
-
-## Template Shape
-
-Root `AGENTS.md` is the compact entrypoint agents should read first. `.context/` holds durable, larger context split by purpose:
-
-- `project-context.md`: purpose, architecture, ownership, current state, deferred work.
-- `engineering-guide.md`: commands, TypeScript style, tests, boundaries, safety.
-- `roadmap-notes.md`: milestones, durable decisions, accepted debt, next staged work.
-- `current-focus.md`: optional short-lived operational notes.
-
-Package overlays should stay small. They point back to root `AGENTS.md` and add only local ownership, path maps, commands, tests, and caveats.
+See [`AGENTS.md`](AGENTS.md) for repo-internal conventions.
