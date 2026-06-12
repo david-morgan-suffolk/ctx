@@ -40,6 +40,7 @@ Open in VS Code or Codespaces and "Reopen in Container" to get the preset's tool
 | `api-py` | Python + FastAPI + Pydantic HTTP API. Async, `httpx` outbound, OpenAPI authoritative. No DB layer assumed. |
 | `library-ts` | Published TS package or developer CLI tool. ESM, `tsc`-only, runtime-neutral, Changesets, optional `bin`. |
 | `library-py` | Published Python package or developer CLI tool. `uv` + `ruff` + `ty` + `pytest` + `hatchling`, `py.typed` shipped, optional `[project.scripts]`. |
+| `data-py` | Python data pipelines: `uv` + `ruff` + `ty` + `pytest`, ingest→transform→publish, idempotent partitioned writes. Optional Databricks (DABs, Lakeflow/DLT, Unity Catalog) and dbt + SQL warehouse sections. |
 
 Each preset drops four files plus a devcontainer:
 
