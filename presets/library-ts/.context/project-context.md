@@ -48,17 +48,6 @@ Source of truth for the consumer contract: `src/index.ts` plus the emitted `dist
 | `.context/` | Agent-readable durable context. |
 | `README.md` | Human-facing usage, install, supported runtimes, example snippets. |
 
-## Current Product State
-
-TODO: enumerate the public surface from `src/index.ts`.
-
-- TODO: `function <name>(...)` — one-line contract.
-- TODO: `class <Name>` — one-line contract.
-- TODO: `type <Name>` — one-line contract.
-- TODO: CLI `<bin-name> <subcommand>` — one-line contract (if CLI).
-
-If the surface is mid-flight, prefer `.context/current-focus.md` for operational details.
-
 ## External Integrations
 
 Most libraries have none. Keep this section only if you wrap a vendor SDK or hit a specific runtime API.
@@ -68,14 +57,11 @@ Most libraries have none. Keep this section only if you wrap a vendor SDK or hit
 
 For each: where the dependency comes from, what surface area is exposed, and what changes when the underlying API breaks.
 
-## Deferred Work
+## Durable Decisions
 
-TODO. Things deliberately not built yet, with a one-line reason. Examples:
+Architecture and tooling choices worth keeping, stated as decisions — not status or progress. In-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
 
-- TODO: CJS dual-build — ESM-only until a real consumer asks.
-- TODO: bundled `.min.js` — consumers tree-shake.
-- TODO: browser-globals build (UMD) — not a target.
-- TODO: separate sub-path exports (`<pkg>/sub`) — single barrel until the surface grows.
+- TODO: A decision this repo has committed to, and the one-line reason it holds.
 
 ## Non-Goals
 

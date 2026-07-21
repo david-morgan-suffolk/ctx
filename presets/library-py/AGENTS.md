@@ -4,9 +4,10 @@ Canonical agent entry for this repo. Compact and operational. Deeper durable con
 
 ## Project Context
 
-- [.context/project-context.md](.context/project-context.md) — what this library is, public surface, ownership map, integrations.
+- [.context/project-context.md](.context/project-context.md) — what this library is, public surface, ownership map, integrations, durable decisions.
 - [.context/engineering-guide.md](.context/engineering-guide.md) — commands, Python standards, build, tests, release flow, safety.
-- [.context/roadmap-notes.md](.context/roadmap-notes.md) — durable decisions, accepted debt, staged work.
+- [.context/writing-tdds.md](.context/writing-tdds.md) — how to write a Technical Design Document for this repo.
+- [.context/README.md](.context/README.md) — `.context/` conventions: durable guides vs. ephemeral `active/` design docs (`YYYYMMDD-<title>.md`, deleted when the work lands).
 
 ## Stack
 
@@ -61,4 +62,4 @@ Search scope, "no settings" rule, and commit/changelog style live in [`.context/
 
 ## Maintenance
 
-Update commands here when `pyproject.toml` scripts change. Update `.context/project-context.md` when the public surface changes shape. Record durable decisions (supported Python minors, async stance, optional extras, CLI choice) in `.context/roadmap-notes.md`. Every user-facing change ships a `CHANGELOG.md` entry under `## [Unreleased]`.
+Update commands here when `pyproject.toml` scripts change. Update `.context/project-context.md` when the public surface changes shape. Record durable decisions (supported Python minors, async stance, optional extras, CLI choice) in `.context/project-context.md`. Every user-facing change ships a `CHANGELOG.md` entry under `## [Unreleased]`.

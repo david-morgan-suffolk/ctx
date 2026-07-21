@@ -60,7 +60,7 @@ class SourceRecord(BaseModel):
 - Validate **once** at the boundary, then convert to internal `@dataclass` for downstream code.
 
 **Dataframe boundaries** — row-level pydantic is right for API/file records; bulk dataframes get a schema check instead:
-- Validate dataframe schemas at ingestion and again before publish. TODO: tool — `pandera` schemas for pandas/polars; explicit `StructType` + expectations if PySpark/DLT. Record the choice in `.context/roadmap-notes.md`.
+- Validate dataframe schemas at ingestion and again before publish. TODO: tool — `pandera` schemas for pandas/polars; explicit `StructType` + expectations if PySpark/DLT. Record the choice in `.context/project-context.md`.
 - A dataframe with an unchecked schema never crosses a stage boundary. Column names, dtypes, and nullability are part of the contract.
 
 ## Layout
@@ -93,10 +93,10 @@ tests/
 
 ## Pipeline Standards
 
-- **Stage naming**: pick one convention and use it everywhere — `ingest` / `transform` / `publish`, or `bronze` / `silver` / `gold`. TODO: pick, record in `.context/roadmap-notes.md`. Do not mix.
+- **Stage naming**: pick one convention and use it everywhere — `ingest` / `transform` / `publish`, or `bronze` / `silver` / `gold`. TODO: pick, record in `.context/project-context.md`. Do not mix.
 - **Idempotency**: re-running a pipeline for the same inputs/partition produces the same published state. Writes are overwrite-by-partition or merge-by-key — never blind append. No side effects that prevent a re-run.
 - **Partitioning & backfills**: every published dataset declares an explicit partition key (TODO: per dataset). A backfill is the same entry point with explicit partition-range arguments — no one-off scripts. Backfills must not change current-partition semantics.
-- **Incremental vs full-refresh**: pick a stance per pipeline. TODO: record per pipeline in `.context/roadmap-notes.md`.
+- **Incremental vs full-refresh**: pick a stance per pipeline. TODO: record per pipeline in `.context/project-context.md`.
 
 ## Local Dev vs Warehouse Execution
 
@@ -246,12 +246,12 @@ SCRATCH.md
 
 - `AGENTS.md` is **durable** and stays committed. It is the canonical entrypoint, not scratch — do not add it to `.gitignore`.
 - Durable architecture, decisions, and short-lived focus notes belong in `.context/` (committed). Scratch belongs at root (ignored).
-- Plans worth keeping graduate into `.context/roadmap-notes.md` or the PR description before the scratch file is discarded.
+- A plan worth keeping graduates into a dated design doc under `.context/active/` (see `.context/README.md`) or into the PR description before the scratch file is discarded. Do not park it in a root scratch file.
 
 ## Context Maintenance
 
 - Keep `AGENTS.md` compact. Push detail into these files.
 - Update `Commands` when `pyproject.toml` scripts change.
 - Update `.context/project-context.md` when architecture, integrations, or ownership shift.
-- Record warehouse, orchestrator, dataframe library, validation tool, stage convention, and dbt-vs-Python transform ownership in `.context/roadmap-notes.md`.
-- `.context/current-focus.md` (optional) holds short-lived active-issue notes; delete when resolved.
+- Record warehouse, orchestrator, dataframe library, validation tool, stage convention, and dbt-vs-Python transform ownership in `.context/project-context.md`.
+- In-flight design docs live in `.context/active/` as `YYYYMMDD-<title>.md`; the PR that lands the work deletes the doc.

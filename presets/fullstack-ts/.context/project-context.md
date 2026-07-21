@@ -39,15 +39,6 @@ Source of truth for UI state: client. Source of truth for domain data: server (P
 | `.context/` | Agent-readable durable context. |
 | `README.md` | Human-facing setup, env vars, deployment. |
 
-## Current Product State
-
-TODO: list shipped surfaces and known boundaries. Examples:
-- TODO: routes/screens implemented (client side).
-- TODO: API endpoints exposed (server side).
-- TODO: authenticated vs public surfaces.
-
-If a feature is mid-flight, prefer `.context/current-focus.md` for the operational details.
-
 ## External Integrations
 
 TODO. Document each external system the server talks to:
@@ -58,12 +49,11 @@ TODO. Document each external system the server talks to:
 
 The client integrates only with this server's API. If the client ever needs to talk to a third party directly (analytics, embeds), document it explicitly here and confirm no secrets reach the bundle.
 
-## Deferred Work
+## Durable Decisions
 
-TODO. Things deliberately not built yet, with a one-line reason. Examples:
-- TODO: split client/server into separate packages — single-repo is sufficient for now.
-- TODO: SSR — SPA is sufficient for v1.
-- TODO: realtime — polling covers the current surfaces.
+Architecture and tooling choices worth keeping, stated as decisions — not status or progress. In-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
+
+- TODO: A decision this repo has committed to, and the one-line reason it holds.
 
 ## Non-Goals
 

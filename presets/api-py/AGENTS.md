@@ -4,9 +4,10 @@ Canonical agent entry for this repo. Compact and operational. Deeper durable con
 
 ## Project Context
 
-- [.context/project-context.md](.context/project-context.md) — what this API is, architecture, ownership map, integrations.
+- [.context/project-context.md](.context/project-context.md) — what this API is, architecture, ownership map, integrations, durable decisions.
 - [.context/engineering-guide.md](.context/engineering-guide.md) — commands, Python standards, FastAPI patterns, safety.
-- [.context/roadmap-notes.md](.context/roadmap-notes.md) — durable decisions, accepted debt, staged work.
+- [.context/writing-tdds.md](.context/writing-tdds.md) — how to write a Technical Design Document for this repo.
+- [.context/README.md](.context/README.md) — `.context/` conventions: durable guides vs. ephemeral `active/` design docs (`YYYYMMDD-<title>.md`, deleted when the work lands).
 
 ## Stack
 
@@ -66,4 +67,4 @@ Search scope, settings discipline, and commit style live in [`.context/engineeri
 
 ## Maintenance
 
-Update commands here when `pyproject.toml` scripts change. Update `.context/` when architecture, integrations, or durable decisions shift. Record auth/contract/deployment choices in `.context/roadmap-notes.md` so they survive turnover.
+Update commands here when `pyproject.toml` scripts change. Update `.context/` when architecture, integrations, or durable decisions shift. Record auth/contract/deployment choices in `.context/project-context.md` so they survive turnover.

@@ -21,7 +21,7 @@ orchestrator (TODO) triggers pipeline runs
 Settings(BaseSettings) ← env vars (only here)
 ```
 
-Source of truth for runtime config: the `Settings` instance. Source of truth for published data: TODO (warehouse tables / object-store paths). Transforms are pure where possible; I/O sits behind `io/` adapter seams that can be swapped in tests. Stage convention TODO: `ingest/transform/publish` or `bronze/silver/gold` — pick one and record in `.context/roadmap-notes.md`.
+Source of truth for runtime config: the `Settings` instance. Source of truth for published data: TODO (warehouse tables / object-store paths). Transforms are pure where possible; I/O sits behind `io/` adapter seams that can be swapped in tests. Stage convention TODO: `ingest/transform/publish` or `bronze/silver/gold` — pick one and record in `.context/project-context.md`.
 
 ## Ownership Map
 
@@ -43,15 +43,6 @@ Source of truth for runtime config: the `Settings` instance. Source of truth for
 | `.context/` | Agent-readable durable context. |
 | `README.md` | Human-facing setup, env vars, run commands. |
 
-## Current Product State
-
-TODO: list shipped capabilities and known boundaries. Examples:
-- TODO: pipelines implemented and their schedules.
-- TODO: datasets/tables published and their consumers.
-- TODO: backfill coverage (which partition ranges have been run).
-
-If a feature is mid-flight, prefer `.context/current-focus.md` for the operational details.
-
 ## External Integrations
 
 TODO. Document each external system this codebase talks to:
@@ -63,12 +54,11 @@ TODO. Document each external system this codebase talks to:
 
 For each: where credentials come from, what is read vs written, what happens on failure.
 
-## Deferred Work
+## Durable Decisions
 
-TODO. Things deliberately not built yet, with a one-line reason. Examples:
-- TODO: streaming ingestion — batch is sufficient for current latency needs.
-- TODO: data-quality monitoring/alerting — validation at boundaries only for now.
-- TODO: automated backfill tooling — manual partition-range runs for now.
+Architecture and tooling choices worth keeping, stated as decisions — not status or progress. In-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
+
+- TODO: A decision this repo has committed to, and the one-line reason it holds.
 
 ## Non-Goals
 

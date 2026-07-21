@@ -37,15 +37,6 @@ Source of truth for runtime config: the `Settings` instance. Source of truth for
 | `.context/` | Agent-readable durable context. |
 | `README.md` | Human-facing setup, env vars, run commands. |
 
-## Current Product State
-
-TODO: list shipped capabilities and known boundaries. Examples:
-- TODO: CLI commands implemented (if a CLI).
-- TODO: HTTP endpoints exposed (if a web service — TODO framework).
-- TODO: scheduled / triggered jobs (if a worker).
-
-If a feature is mid-flight, prefer `.context/current-focus.md` for the operational details.
-
 ## External Integrations
 
 TODO. Document each external system this codebase talks to:
@@ -56,12 +47,11 @@ TODO. Document each external system this codebase talks to:
 
 For each: where credentials come from, what is read vs written, what happens on failure.
 
-## Deferred Work
+## Durable Decisions
 
-TODO. Things deliberately not built yet, with a one-line reason. Examples:
-- TODO: async I/O — sync is sufficient for current throughput.
-- TODO: structured logging shipped to a backend — local stdout for now.
-- TODO: packaging as a wheel — internal-only for now.
+Architecture and tooling choices worth keeping, stated as decisions — not status or progress. In-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
+
+- TODO: A decision this repo has committed to, and the one-line reason it holds.
 
 ## Non-Goals
 

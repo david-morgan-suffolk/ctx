@@ -4,9 +4,10 @@ Canonical agent entry for this repo. Compact and operational. Deeper durable con
 
 ## Project Context
 
-- [.context/project-context.md](.context/project-context.md) — what this app is, architecture, ownership map, integrations.
+- [.context/project-context.md](.context/project-context.md) — what this app is, architecture, ownership map, integrations, durable decisions.
 - [.context/engineering-guide.md](.context/engineering-guide.md) — commands, language standards, cross-language contract rules, safety.
-- [.context/roadmap-notes.md](.context/roadmap-notes.md) — durable decisions, accepted debt, staged work.
+- [.context/writing-tdds.md](.context/writing-tdds.md) — how to write a Technical Design Document for this repo.
+- [.context/README.md](.context/README.md) — `.context/` conventions: durable guides vs. ephemeral `active/` design docs (`YYYYMMDD-<title>.md`, deleted when the work lands).
 
 ## Stack
 
@@ -45,7 +46,7 @@ Cite exact script scope. Do not claim a command runs every test unless the relev
 - API is the contract authority. FastAPI `pydantic.BaseModel` request/response models → `openapi.json` → generated TS types in `web/src/api-client/`. Web never edits the generated file by hand.
 - Strict TypeScript in `web/`. Same `frontend-ts` rules: idle/loading/success/error on every async surface, controlled forms, no backend secrets in the bundle.
 - Strict Python in `api/`. Same `python` rules: `Settings(BaseSettings)` is the only env path, `@dataclass` internal, `BaseModel` at boundaries.
-- Dev: Vite proxies `/api` to the FastAPI port. In production: choose between same-origin (FastAPI serves the built bundle) or split-origin (web on CDN, API behind a separate host) — document in `.context/roadmap-notes.md`.
+- Dev: Vite proxies `/api` to the FastAPI port. In production: choose between same-origin (FastAPI serves the built bundle) or split-origin (web on CDN, API behind a separate host) — document in `.context/project-context.md`.
 
 ## Safety
 
@@ -69,4 +70,4 @@ Search scope, settings discipline, and commit style live in [`.context/engineeri
 
 ## Maintenance
 
-After any API model change: emit `openapi.json`, regenerate web types, commit both. Update `Commands` here when scripts change in either side. Record cross-language contract decisions (auth scheme, error envelope, pagination model) in `.context/roadmap-notes.md`.
+After any API model change: emit `openapi.json`, regenerate web types, commit both. Update `Commands` here when scripts change in either side. Record cross-language contract decisions (auth scheme, error envelope, pagination model) in `.context/project-context.md`.

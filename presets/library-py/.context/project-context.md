@@ -48,17 +48,6 @@ Source of truth for the consumer contract: the package `__init__.py` plus each m
 | `.context/` | Agent-readable durable context. |
 | `README.md` | Human-facing install, supported Python versions, example usage. |
 
-## Current Product State
-
-TODO: enumerate the public surface from `src/<pkg>/__init__.py`.
-
-- TODO: `def <name>(...)` — one-line contract.
-- TODO: `class <Name>` — one-line contract.
-- TODO: `type <Name>` — one-line contract.
-- TODO: CLI `<bin-name> <subcommand>` — one-line contract (if CLI).
-
-If the surface is mid-flight, prefer `.context/current-focus.md` for operational details.
-
 ## External Integrations
 
 Most libraries have none. Keep this section only if you wrap a third-party SDK or hit a specific runtime API.
@@ -68,14 +57,11 @@ Most libraries have none. Keep this section only if you wrap a third-party SDK o
 
 For each: where the dependency comes from, what surface area is exposed, and what changes when the underlying API breaks.
 
-## Deferred Work
+## Durable Decisions
 
-TODO. Things deliberately not built yet, with a one-line reason. Examples:
+Architecture and tooling choices worth keeping, stated as decisions — not status or progress. In-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
 
-- TODO: async public API — sync-only until a real consumer asks.
-- TODO: C extension — pure-Python perf is sufficient.
-- TODO: stubs-only package (`<pkg>-stubs`) — `py.typed` inline is enough.
-- TODO: optional extras for `<feature>` — not enough surface to split yet.
+- TODO: A decision this repo has committed to, and the one-line reason it holds.
 
 ## Non-Goals
 

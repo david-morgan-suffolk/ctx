@@ -86,7 +86,7 @@ Default: TODO. Choose one of:
 - **Same-origin**: FastAPI mounts the built `web/dist/` as static files. Single deploy artifact.
 - **Split-origin**: web on a CDN, API on a separate host. CORS configured explicitly in FastAPI. `VITE_API_BASE_URL` injected at build time.
 
-Document the choice in `.context/roadmap-notes.md` and reflect it in `web/vite.config.ts` and the API's static-mount config.
+Document the choice in `.context/project-context.md` and reflect it in `web/vite.config.ts` and the API's static-mount config.
 
 ## Auth & Error Envelope
 
@@ -155,7 +155,7 @@ export const env = Env.parse(import.meta.env);
 Rules:
 
 - API secrets never reach the web bundle. The only API-related value in `web/` is the public base URL (and even that is optional in same-origin deploys).
-- New API env var: extend `Settings`, update `api/.env.example`, document any operational rollout in `.context/roadmap-notes.md`.
+- New API env var: extend `Settings`, update `api/.env.example`, document any operational rollout in `.context/project-context.md`.
 - New web env var: extend the Zod schema, add to `web/.env.example`, prefix with `VITE_`.
 - Tests on each side build settings from overrides — never mutate `os.environ` or `import.meta.env` globally.
 
@@ -198,7 +198,7 @@ SCRATCH.md
 
 - `AGENTS.md` is **durable** and stays committed. It is the canonical entrypoint, not scratch — do not add it to `.gitignore`.
 - Durable architecture, decisions, and short-lived focus notes belong in `.context/` (committed). Scratch belongs at root (ignored).
-- Plans worth keeping graduate into `.context/roadmap-notes.md` or the PR description before the scratch file is discarded.
+- A plan worth keeping graduates into a dated design doc under `.context/active/` (see `.context/README.md`) or into the PR description before the scratch file is discarded. Do not park it in a root scratch file.
 
 ## Context Maintenance
 
@@ -206,5 +206,5 @@ SCRATCH.md
 - Update `Commands` when scripts change in either side.
 - Update `.context/project-context.md` when architecture, integrations, or ownership shift.
 - Every API model change triggers contract regen. If you change `models/` without committing the new `openapi.json` and `types.ts`, the contract drifts silently — treat that as a bug.
-- Record durable cross-language decisions (deploy topology, auth scheme, error envelope, pagination model) in `.context/roadmap-notes.md`.
-- `.context/current-focus.md` (optional) holds short-lived active-issue notes; delete when resolved.
+- Record durable cross-language decisions (deploy topology, auth scheme, error envelope, pagination model) in `.context/project-context.md`.
+- In-flight design docs live in `.context/active/` as `YYYYMMDD-<title>.md`; the PR that lands the work deletes the doc.
