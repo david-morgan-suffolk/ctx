@@ -4,11 +4,12 @@
 
 `@suffolk/ctx` provides reusable agent-context templates packaged two ways: as a **GitHub repo template** (click "Use this template" → run `./init.sh` → pick a preset) and as a **Node + pnpm TypeScript scaffolder** for adding context into existing repos.
 
-Additional durable context lives in `.context/`:
+Additional durable context lives in `.context/` (conventions in `.context/README.md`):
 
-- `.context/project-context.md` - purpose, architecture, ownership, current state, and deferred work.
+- `.context/project-context.md` - purpose, architecture, ownership, and durable decisions.
 - `.context/engineering-guide.md` - commands, TypeScript style, template rules, testing, and safety.
-- `.context/roadmap-notes.md` - milestones, decisions, accepted debt, and staged work.
+- `.context/writing-tdds.md` - how to write a Technical Design Document for this repo.
+- `.context/active/` - dated in-flight design docs (`YYYYMMDD-<title>.md`); the PR that lands the work deletes the doc. Guides never carry progress.
 
 ## Repo Shape
 
@@ -18,7 +19,7 @@ Additional durable context lives in `.context/`:
 | `presets/<variant>/` | Stack-tailored starter packs. Each contains `AGENTS.md`, `.context/`, and `.devcontainer/`. |
 | `.devcontainer/` | Devcontainer for the template repo itself (removed by `init.sh` in templated copies). |
 | `scripts/scaffold-context.ts` | CLI that detects repo metadata and renders context templates for existing repos. |
-| `templates/agent-context/` | Markdown templates for root, context, shim, current-focus, and package overlay files. |
+| `templates/agent-context/` | Markdown templates for root, context guides (incl. `.context/README.md` conventions and `writing-tdds.md`), shim, and package overlay files. |
 | `README.md` | User-facing usage and standard explanation. |
 
 ## Commands

@@ -12,7 +12,7 @@ Use pnpm. TypeScript runs via `tsx` (devDep).
 Validation examples:
 
 ```bash
-pnpm scaffold --target /Users/david/suffolk/big-speckle --agent-shim --current-focus
+pnpm scaffold --target /Users/david/suffolk/big-speckle --agent-shim
 pnpm scaffold --target /Users/david/suffolk/big --package-overlays
 ```
 
@@ -28,9 +28,10 @@ pnpm scaffold --target /Users/david/suffolk/big --package-overlays
 - Use `AGENTS.md` as canonical root guide.
 - Keep `AGENT.md` as a tiny compatibility shim, not a duplicate manual.
 - Root guide should be compact and operational.
-- `.context/project-context.md` should hold architecture and ownership.
+- `.context/project-context.md` should hold architecture, ownership, and durable decisions.
 - `.context/engineering-guide.md` should hold commands, style, tests, and safety.
-- `.context/roadmap-notes.md` should hold durable decisions and accepted debt.
+- `.context/writing-tdds.md` is the TDD authoring guide; `.context/README.md` documents the guides-vs-active split.
+- `.context/active/` holds dated in-flight design docs; the PR that lands the work deletes them. Guides never carry progress or status.
 - Package overlays should say "Read root AGENTS.md first" and avoid duplicating broad guidance.
 
 ## Search Scope
@@ -89,8 +90,8 @@ SCRATCH.md
 ```
 
 - `AGENTS.md` is **durable** and stays committed. It is the canonical entrypoint, not scratch — do not add it to `.gitignore`.
-- Durable architecture, decisions, and short-lived focus notes belong in `.context/` (committed). Scratch belongs at root (ignored).
-- Plans worth keeping graduate into `.context/roadmap-notes.md` or the PR description before the scratch file is discarded.
+- Durable architecture, decisions, and caveats belong in `.context/` (committed). Scratch belongs at root (ignored).
+- A plan worth keeping graduates into a dated design doc under `.context/active/` (see `.context/README.md`) or into the PR description before the scratch file is discarded. Do not park it in a root scratch file.
 
 ## Testing
 
