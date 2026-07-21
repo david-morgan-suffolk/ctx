@@ -4,9 +4,10 @@ Canonical agent entry for this repo. Compact and operational. Deeper durable con
 
 ## Project Context
 
-- [.context/project-context.md](.context/project-context.md) — what this app is, architecture, ownership map, integrations.
+- [.context/project-context.md](.context/project-context.md) — what this app is, architecture, ownership map, integrations, durable decisions.
 - [.context/engineering-guide.md](.context/engineering-guide.md) — commands, TypeScript/React standards, testing, safety.
-- [.context/roadmap-notes.md](.context/roadmap-notes.md) — durable decisions, accepted debt, staged work.
+- [.context/writing-tdds.md](.context/writing-tdds.md) — how to write a Technical Design Document for this repo.
+- [.context/README.md](.context/README.md) — `.context/` conventions: durable guides vs. ephemeral `active/` design docs (`YYYYMMDD-<title>.md`, deleted when the work lands).
 
 ## Stack
 
@@ -56,4 +57,4 @@ Search scope, settings discipline, and commit style live in [`.context/engineeri
 
 ## Maintenance
 
-Update commands here when `package.json` scripts change. Update `.context/` when architecture, integrations, or durable decisions shift. Keep `.context/current-focus.md` (optional) for short-lived active-issue notes; delete when resolved.
+Update commands here when `package.json` scripts change. Update `.context/` when architecture, integrations, or durable decisions shift. Track in-flight work in a dated `.context/active/` doc; delete it when the work lands.

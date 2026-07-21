@@ -95,7 +95,7 @@ tests/
 - **Routers** are per-domain `APIRouter(prefix="/...", tags=[...])`. Mount with `app.include_router(...)` in the factory.
 - **Endpoints** declare `response_model=` so OpenAPI gets typed responses without depending on inferred annotations. `status_code=` set explicitly when not 200.
 - **Dependencies** carry typed values in: `Settings`, principal (from `auth.py`), `AsyncClient`. Services receive these as constructor args, not as globals.
-- **Versioning**: prefix per major version (`/v1/...`) if you expect to break compatibility. Decide early and record in `roadmap-notes.md`.
+- **Versioning**: prefix per major version (`/v1/...`) if you expect to break compatibility. Decide early and record in `.context/project-context.md`.
 
 ## Auth
 
@@ -224,12 +224,12 @@ SCRATCH.md
 
 - `AGENTS.md` is **durable** and stays committed. It is the canonical entrypoint, not scratch — do not add it to `.gitignore`.
 - Durable architecture, decisions, and short-lived focus notes belong in `.context/` (committed). Scratch belongs at root (ignored).
-- Plans worth keeping graduate into `.context/roadmap-notes.md` or the PR description before the scratch file is discarded.
+- A plan worth keeping graduates into a dated design doc under `.context/active/` (see `.context/README.md`) or into the PR description before the scratch file is discarded. Do not park it in a root scratch file.
 
 ## Context Maintenance
 
 - Keep `AGENTS.md` compact. Push detail into these files.
 - Update `Commands` when `pyproject.toml` scripts change.
 - Update `.context/project-context.md` when architecture, integrations, or ownership shift.
-- Record durable decisions (auth model, error envelope, async stance, deployment target) in `.context/roadmap-notes.md`.
-- `.context/current-focus.md` (optional) holds short-lived active-issue notes; delete when resolved.
+- Record durable decisions (auth model, error envelope, async stance, deployment target) in `.context/project-context.md`.
+- In-flight design docs live in `.context/active/` as `YYYYMMDD-<title>.md`; the PR that lands the work deletes the doc.

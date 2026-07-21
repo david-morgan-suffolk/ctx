@@ -42,13 +42,17 @@ Open in VS Code or Codespaces and "Reopen in Container" to get the preset's tool
 | `library-py` | Published Python package or developer CLI tool. `uv` + `ruff` + `ty` + `pytest` + `hatchling`, `py.typed` shipped, optional `[project.scripts]`. |
 | `data-py` | Python data pipelines: `uv` + `ruff` + `ty` + `pytest`, ingest→transform→publish, idempotent partitioned writes. Optional Databricks (DABs, Lakeflow/DLT, Unity Catalog) and dbt + SQL warehouse sections. |
 
-Each preset drops four files plus a devcontainer:
+Each preset drops these files plus a devcontainer:
 
 - `AGENTS.md` — canonical entrypoint. Compact, operational. Stack, commands, standards, ownership map.
-- `.context/project-context.md` — purpose, architecture, ownership, current state, deferred work.
+- `.context/README.md` — conventions for `.context/`: durable guides vs. ephemeral `active/` docs.
+- `.context/project-context.md` — purpose, architecture, ownership, durable decisions.
 - `.context/engineering-guide.md` — commands, language standards, framework patterns, testing, safety, commits.
-- `.context/roadmap-notes.md` — completed milestones, durable decisions, accepted debt, staged work.
+- `.context/writing-tdds.md` — how to write a Technical Design Document for the repo.
+- `.context/active/` — dated in-flight design docs (`YYYYMMDD-<title>.md`); the PR that lands the work deletes the doc. Guides never carry progress.
 - `.devcontainer/devcontainer.json` — VS Code / Codespaces dev environment for that stack.
+
+`.context/` uses a two-tier lifecycle: durable **guides** at the root never describe progress, and ephemeral **active docs** carry in-flight design and are deleted when their work lands. See `.context/README.md` in any preset.
 
 `AGENTS.md` is the canonical name. Some tools expect singular `AGENT.md` — generate it as a shim, not the source of truth.
 
@@ -61,7 +65,7 @@ pnpm scaffold --target ~/path/to/repo            # dry-run
 pnpm scaffold --target ~/path/to/repo --write    # write base files
 ```
 
-Flags: `--force` overwrites, `--agent-shim` adds `AGENT.md`, `--current-focus` adds the optional scratch file, `--package-overlays` writes small `AGENTS.md` files inside detected workspace packages.
+Flags: `--force` overwrites, `--agent-shim` adds `AGENT.md`, `--package-overlays` writes small `AGENTS.md` files inside detected workspace packages. The base run always creates the `.context/` guides plus an empty, tracked `.context/active/` folder for dated in-flight design docs.
 
 Reads only metadata (`package.json`, `tsconfig*.json`, common config files, workspace manifests). Skips existing files unless `--force`. Leaves `TODO:` markers where it can't infer. Does not read `.env`, `.secrets`, certs, or provider payloads.
 

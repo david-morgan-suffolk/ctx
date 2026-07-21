@@ -40,15 +40,6 @@ Source of truth for the HTTP contract is the Pydantic models — FastAPI generat
 | `.context/` | Agent-readable durable context. |
 | `README.md` | Human-facing setup, env vars, run commands. |
 
-## Current Product State
-
-TODO: list shipped endpoints and known boundaries. Examples:
-- TODO: `GET /health` — public liveness probe.
-- TODO: `POST /api/...` — TODO purpose.
-- TODO: auth surface — TODO provider + scopes.
-
-If a feature is mid-flight, prefer `.context/current-focus.md` for the operational details.
-
 ## External Integrations
 
 TODO. Document each external system this API talks to:
@@ -60,12 +51,11 @@ TODO. Document each external system this API talks to:
 
 For each: where credentials come from, what the API reads vs writes, what happens on failure.
 
-## Deferred Work
+## Durable Decisions
 
-TODO. Things deliberately not built yet, with a one-line reason. Examples:
-- TODO: rate limiting — single-tenant launch.
-- TODO: tracing — stdout logs sufficient for v1.
-- TODO: per-tenant quotas — single tenant for now.
+Architecture and tooling choices worth keeping, stated as decisions — not status or progress. In-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
+
+- TODO: A decision this repo has committed to, and the one-line reason it holds.
 
 ## Non-Goals
 

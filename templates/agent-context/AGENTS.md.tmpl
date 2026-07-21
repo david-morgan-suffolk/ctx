@@ -4,11 +4,12 @@
 
 {{repoName}}: {{repoDescription}}
 
-Additional durable context lives in `.context/`:
+Additional durable context lives in `.context/` (conventions in `.context/README.md`):
 
-- `.context/project-context.md` - product purpose, architecture, ownership, current state, and deferred work.
+- `.context/project-context.md` - product purpose, architecture, ownership, and durable decisions.
 - `.context/engineering-guide.md` - commands, TypeScript style, testing patterns, boundaries, and safety rules.
-- `.context/roadmap-notes.md` - durable decisions, milestones, accepted debt, and staged work.
+- `.context/writing-tdds.md` - how to write a Technical Design Document for this repo.
+- `.context/active/` - dated in-flight design docs (`YYYYMMDD-<title>.md`); the PR that lands the work deletes the doc. Guides never carry progress.
 
 ## Repo Shape
 
@@ -60,5 +61,5 @@ Search scope, settings discipline, and commit style live in [`.context/engineeri
 ## Maintenance
 
 - Update this file when commands, package ownership, or safety boundaries change.
-- Update `.context/roadmap-notes.md` for durable decisions and accepted debt.
-- Do not use this file as a task log; use issues, PRs, or `.context/current-focus.md` when short-lived notes are needed.
+- Record durable decisions in `.context/project-context.md`.
+- Do not use this file as a task log; track in-flight work in a dated `.context/active/` doc, issues, or PRs.

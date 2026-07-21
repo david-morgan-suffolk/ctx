@@ -155,12 +155,12 @@ SCRATCH.md
 
 - `AGENTS.md` is **durable** and stays committed. It is the canonical entrypoint, not scratch — do not add it to `.gitignore`.
 - Durable architecture, decisions, and short-lived focus notes belong in `.context/` (committed). Scratch belongs at root (ignored).
-- Plans worth keeping graduate into `.context/roadmap-notes.md` or the PR description before the scratch file is discarded.
+- A plan worth keeping graduates into a dated design doc under `.context/active/` (see `.context/README.md`) or into the PR description before the scratch file is discarded. Do not park it in a root scratch file.
 
 ## Context Maintenance
 
 - Keep `AGENTS.md` compact. Push detail into these files.
 - Update `Commands` when `package.json` scripts change.
 - Update `.context/project-context.md` when architecture, integrations, or ownership shift.
-- Record durable decisions (chosen state lib, chosen router, chosen test runner) in `.context/roadmap-notes.md`.
-- `.context/current-focus.md` (optional) holds short-lived active-issue notes; delete when resolved.
+- Record durable decisions (chosen state lib, chosen router, chosen test runner) in `.context/project-context.md`.
+- In-flight design docs live in `.context/active/` as `YYYYMMDD-<title>.md`; the PR that lands the work deletes the doc.

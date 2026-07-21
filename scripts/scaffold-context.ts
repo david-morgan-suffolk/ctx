@@ -42,7 +42,6 @@ type Args = {
   force: boolean;
   agentShim: boolean;
   packageOverlays: boolean;
-  currentFocus: boolean;
   help: boolean;
 };
 
@@ -107,8 +106,16 @@ async function main() {
       content: render(await loadTemplate("engineering-guide.md.tmpl"), context),
     },
     {
-      path: join(target, ".context", "roadmap-notes.md"),
-      content: render(await loadTemplate("roadmap-notes.md.tmpl"), context),
+      path: join(target, ".context", "writing-tdds.md"),
+      content: render(await loadTemplate("writing-tdds.md.tmpl"), context),
+    },
+    {
+      path: join(target, ".context", "README.md"),
+      content: render(await loadTemplate("README.md.tmpl"), context),
+    },
+    {
+      path: join(target, ".context", "active", ".gitkeep"),
+      content: "",
     },
   ];
 
@@ -116,13 +123,6 @@ async function main() {
     files.push({
       path: join(target, "AGENT.md"),
       content: render(await loadTemplate("AGENT.md.tmpl"), context),
-    });
-  }
-
-  if (args.currentFocus) {
-    files.push({
-      path: join(target, ".context", "current-focus.md"),
-      content: render(await loadTemplate("current-focus.md.tmpl"), context),
     });
   }
 
@@ -152,7 +152,6 @@ function parseArgs(argv: string[]): Args {
     force: false,
     agentShim: false,
     packageOverlays: false,
-    currentFocus: false,
     help: false,
   };
 
@@ -169,7 +168,6 @@ function parseArgs(argv: string[]): Args {
     else if (arg === "--force") args.force = true;
     else if (arg === "--agent-shim") args.agentShim = true;
     else if (arg === "--package-overlays") args.packageOverlays = true;
-    else if (arg === "--current-focus") args.currentFocus = true;
     else throw new Error(`Unknown argument: ${arg}`);
   }
 
@@ -185,8 +183,10 @@ Options:
   --force              Overwrite existing files.
   --agent-shim         Also generate AGENT.md as a compatibility shim.
   --package-overlays   Generate AGENTS.md inside detected workspace packages.
-  --current-focus      Generate .context/current-focus.md for short-lived notes.
   --help               Show this help.
+
+Base files: AGENTS.md, .context/{project-context,engineering-guide,writing-tdds,README}.md,
+and .context/active/ (an empty, tracked folder for dated in-flight design docs).
 `);
 }
 

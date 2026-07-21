@@ -32,20 +32,20 @@ The scaffolder reads safe metadata from a target repo, builds a render context, 
 | `README.md` | Usage examples and naming standard. |
 | `AGENTS.md` and `.context/` | Context for this scaffolding repo itself. |
 
-## Current State
+## Durable Decisions
 
-- Repo is usable as a GitHub template. `init.sh` applies a preset and cleans up scaffolding inside the templated copy.
-- Each of the 9 presets ships its own `.devcontainer/devcontainer.json` (TS presets: node:22 + pnpm; Python presets: python:3.12 + uv; combo: both).
-- Root standard is `AGENTS.md`.
-- `AGENT.md` generation is opt-in via `--agent-shim` on the scaffolder.
-- Base generated files are `AGENTS.md`, `.context/project-context.md`, `.context/engineering-guide.md`, and `.context/roadmap-notes.md`.
-- Optional generation supports `.context/current-focus.md` and workspace package overlays.
-- Existing files are skipped unless `--force` is passed.
+Choices this repo has committed to. Not status or progress — in-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
 
-## Deferred Work
+- `AGENTS.md` is the canonical root guide. `AGENT.md` is an opt-in compatibility shim only (`--agent-shim`), never a duplicate manual.
+- One GitHub template repo with a preset chooser, not one template per preset — lower maintenance, single source of truth for presets.
+- `init.sh` is dependency-free bash so a freshly-templated repo can run it before installing Node, pnpm, or any toolchain.
+- The scaffolder stays runtime-dependency-free (Node stdlib only) until complexity proves a need; `tsx` is a devDep.
+- Per-preset devcontainers ride inside `presets/<variant>/.devcontainer/`; `init.sh`'s recursive copy is enough.
+- The scaffolder defaults to dry-run, skips existing files unless `--force`, and reads only safe metadata — never secret-bearing files.
+- Generated templates leave `TODO:` markers for facts that cannot be inferred safely.
+- `.context/` follows the guides-vs-active split (see `.context/README.md`): durable guides at the root, dated ephemeral design docs in `active/`. There is no `roadmap-notes.md`.
 
-- Add snapshot tests for rendered templates and for `init.sh` applied against each preset.
-- Add fixture repos for a single-package Node project and a workspace monorepo.
-- Add optional config file support for repo-specific template choices.
-- Add richer workspace glob support if needed beyond one-level patterns.
-- Add a `.github/workflows/template-bootstrap.yml` that nudges users of freshly-templated repos to run `init.sh`.
+## Accepted Limitations
+
+- No snapshot tests yet; `pnpm check` is a runtime smoke check and TypeScript typechecking is not wired.
+- Workspace glob support handles common one-level patterns, not full glob semantics.

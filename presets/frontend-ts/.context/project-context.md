@@ -37,15 +37,6 @@ Source of truth for UI state lives in the client. Source of truth for domain dat
 | `.context/` | Agent-readable durable context. |
 | `README.md` | Human-facing setup and deployment. |
 
-## Current Product State
-
-TODO: list shipped features and known boundaries. Examples:
-- TODO: routes/screens implemented
-- TODO: authenticated vs public surfaces
-- TODO: external services this client consumes
-
-Keep this short. If a feature is mid-flight, prefer `.context/current-focus.md` for the operational details.
-
 ## External Integrations
 
 TODO. Document each integration the browser touches directly:
@@ -55,12 +46,11 @@ TODO. Document each integration the browser touches directly:
 
 For each: where credentials are sourced, what is safe to expose in the bundle, what stays server-side.
 
-## Deferred Work
+## Durable Decisions
 
-TODO. Things deliberately not built yet, with a one-line reason. Examples:
-- TODO: i18n — single-locale launch
-- TODO: offline cache — not in product scope yet
-- TODO: design-system extraction — wait until second app needs it
+Architecture and tooling choices worth keeping, stated as decisions — not status or progress. In-flight work and known gaps live in `.context/active/` docs, issues, or PRs, never here.
+
+- TODO: A decision this repo has committed to, and the one-line reason it holds.
 
 ## Non-Goals
 
